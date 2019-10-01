@@ -10,7 +10,7 @@ public class TestServerCardGame {
         try{
 
             LocateRegistry.createRegistry(8080);
-            Server serveurCardGame = new Server();
+            Server serveurCardGame = new ServerImpl();
             Naming.bind("//localhost:8080/serveurCardGame",serveurCardGame);
         }catch (Exception e){
             System.out.println(e.toString());

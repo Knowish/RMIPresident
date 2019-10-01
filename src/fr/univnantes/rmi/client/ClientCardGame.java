@@ -12,6 +12,7 @@ public class ClientCardGame {
 
             Server cardgame = (Server) Naming.lookup(
                     "//localhost:8080/serveurCardGame");
+            System.out.println("Yolo");
         } catch (Exception e) {
             System.out.println(e.toString());
         }
