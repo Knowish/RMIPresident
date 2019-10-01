@@ -1,9 +1,11 @@
+package fr.univnantes.rmi;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class ServeurCardGame extends UnicastRemoteObject implements Cardgame {
+public class ServerCardGame extends UnicastRemoteObject implements CardGame {
 
-    protected ServeurCardGame() throws RemoteException {
+    public ServerCardGame() throws RemoteException {
     }
 
     @Override

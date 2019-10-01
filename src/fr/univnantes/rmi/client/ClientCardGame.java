@@ -1,17 +1,19 @@
+package fr.univnantes.rmi.client;
+
+import fr.univnantes.rmi.ServerCardGame;
+
 import java.rmi.Naming;
-import java.rmi.registry.LocateRegistry;
-import java.util.Calendar;
 
 public class ClientCardGame {
 
     public static void main(String[] argv){
 
-        try{
+        try {
 
-            Cardgame cardgame = (Cardgame) Naming.lookup(
+            ServerCardGame cardgame = (ServerCardGame) Naming.lookup(
                     "//localhost:8080/serveurCardGame");
             System.out.println(cardgame.affiche());
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
 
