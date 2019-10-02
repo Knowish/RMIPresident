@@ -1,10 +1,8 @@
-package fr.univnantes.rmi.client;
-
-import fr.univnantes.rmi.Card;
+package fr.univnantes.rmi.impl;
 
 import java.util.List;
 
-public class Player extends Client {
+public class Player {
 
 
     private String userName;

@@ -1,6 +1,6 @@
-package fr.univnantes.rmi.client;
+package fr.univnantes.rmi.impl;
 
-import fr.univnantes.rmi.server.Server;
+import fr.univnantes.rmi.inter.Server;
 
 import javax.swing.*;
 import java.rmi.Naming;
