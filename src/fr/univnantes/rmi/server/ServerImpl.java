@@ -19,6 +19,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
+    public void apply(Client client) throws RemoteException {
+
+    }
+
+    @Override
     public void apply(Player client) throws RemoteException {
         pendingPlayers.add(client);
         if (pendingPlayers.size() >= 4) {
@@ -37,11 +42,12 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     @Override
     public String getPendingPlayers() throws RemoteException {
-        StringBuilder res = new StringBuilder();
-        for (Client c : pendingPlayers) {
+        /*StringBuilder res = new StringBuilder();
+        for (Player c : pendingPlayers) {
             res.append(c.getName()).append(" is waiting for a game\n");
         }
-        return res.toString();
+        return res.toString();*/
+        return null;
     }
 
 }

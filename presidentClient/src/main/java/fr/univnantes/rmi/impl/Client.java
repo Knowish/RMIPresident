@@ -18,7 +18,7 @@ public class Client {
             gameServer = (Server) Naming.lookup(
                     "//localhost:8080/serveurCardGame");
 
-            //gameServer.apply(this);
+            gameServer.apply(this);
 
         } catch (Exception e) {
 

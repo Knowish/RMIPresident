@@ -18,10 +18,6 @@ public class ApplicationTestClass {
             Player client2 = new Player("Player2", cardgame);
             Player client3 = new Player("Player3", cardgame);
             Player client4 = new Player("Player4", cardgame);
-            client.findGame();
-            client2.findGame();
-            client3.findGame();
-            client4.findGame();
 
 
         } catch (Exception e) {

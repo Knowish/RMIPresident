@@ -21,7 +21,7 @@ public class Client implements Serializable {
 
     public void findGame(String username) {
 
-        Player myPlayer = new Player();
+        Player myPlayer = new Player(username, gameServer);
         myPlayer.setUserName(username);
 
         try {

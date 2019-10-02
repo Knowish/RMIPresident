@@ -1,12 +1,9 @@
 package fr.univnantes.rmi.impl;
 
-import fr.univnantes.rmi.inter.Server;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-
 
     private String userName;
     private List<Card> hand;
