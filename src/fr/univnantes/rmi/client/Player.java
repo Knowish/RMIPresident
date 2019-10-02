@@ -10,6 +10,9 @@ import java.util.List;
 
 public class Player extends Client {
     private static final long serialVersionUID = -1486356081005657631L;
+
+
+    private String userName;
     private List<Card> hand;
     private boolean passTurn = false;
 
@@ -38,5 +41,13 @@ public class Player extends Client {
         for (Card c : hand) {
             System.out.println(c.getName());
         }
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
