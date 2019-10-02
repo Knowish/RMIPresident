@@ -19,6 +19,7 @@ public class Client {
                     "//localhost:8080/serveurCardGame");
 
             //gameServer.apply(this);
+            System.out.println("Connected to server as " + myPlayer.getUserName());
 
         } catch (Exception e) {
 

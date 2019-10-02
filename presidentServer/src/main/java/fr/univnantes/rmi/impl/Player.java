@@ -10,6 +10,7 @@ public class Player {
     private boolean passTurn = false;
 
     public Player(String name) {
+        userName = name;
         hand = new ArrayList<>();
     }
 
