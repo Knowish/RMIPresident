@@ -1,18 +1,42 @@
 package fr.univnantes.rmi.client;
 
 import fr.univnantes.rmi.Card;
+import fr.univnantes.rmi.server.Server;
 
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Client {
+    private static final long serialVersionUID = -1486356081005657631L;
     private List<Card> hand;
     private boolean passTurn = false;
 
-    public void playCard(Card card) {
+    public Player() {super();}
 
+    public Player(String name, Server server) {
+        super(name, server);
+        hand = new ArrayList<>();
+    }
+
+    public void playCard(Card card) {
+        if (!passTurn) {
+            hand.remove(card);
+        }
+    }
+
+    public void addToHand(Card card) {
+        hand.add(card);
     }
 
     public void pass() {
         passTurn = true;
+    }
+
+    public void getHand() {
+        for (Card c : hand) {
+            System.out.println(c.getName());
+        }
     }
 }

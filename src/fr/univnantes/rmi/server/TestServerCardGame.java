@@ -12,6 +12,7 @@ public class TestServerCardGame {
             LocateRegistry.createRegistry(8080);
             Server serveurCardGame = new ServerImpl();
             Naming.bind("//localhost:8080/serveurCardGame",serveurCardGame);
+            System.out.println("Running...");
         }catch (Exception e){
             System.out.println(e.toString());
         }
