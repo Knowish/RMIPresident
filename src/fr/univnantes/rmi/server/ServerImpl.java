@@ -13,13 +13,13 @@ import java.util.Queue;
 public class ServerImpl extends UnicastRemoteObject implements Server {
 
     private Game game;
-    private Queue<Client> pendingPlayers = new ArrayDeque<>();
+    private Queue<Player> pendingPlayers = new ArrayDeque<>();
 
     protected ServerImpl() throws RemoteException {
     }
 
     @Override
-    public void apply(Client client) throws RemoteException {
+    public void apply(Player client) throws RemoteException {
         pendingPlayers.add(client);
         if (pendingPlayers.size() >= 4) {
             List<Player> startingPlayers = new ArrayList<>();

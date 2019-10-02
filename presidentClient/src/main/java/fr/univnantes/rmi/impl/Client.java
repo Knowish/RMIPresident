@@ -10,8 +10,8 @@ public class Client {
 
     public void findGame(String username) {
 
-        Player myPlayer = new Player();
-        myPlayer.setUserName(username);
+        Player myPlayer = new Player(username);
+        //myPlayer.setUserName(username);
 
         try {
 

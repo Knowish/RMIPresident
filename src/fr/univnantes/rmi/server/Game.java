@@ -4,7 +4,6 @@ import fr.univnantes.rmi.Card;
 import fr.univnantes.rmi.CardPool;
 import fr.univnantes.rmi.client.Player;
 
-import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;

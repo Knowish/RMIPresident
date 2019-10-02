@@ -8,18 +8,14 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends Client {
-    private static final long serialVersionUID = -1486356081005657631L;
+public class Player {
 
 
     private String userName;
     private List<Card> hand;
     private boolean passTurn = false;
 
-    public Player() {super();}
-
     public Player(String name, Server server) {
-        super(name, server);
         hand = new ArrayList<>();
     }
 

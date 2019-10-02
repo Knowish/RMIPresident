@@ -3,7 +3,10 @@ package fr.univnantes.rmi.client;
 import fr.univnantes.rmi.server.Server;
 
 import java.io.Serializable;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
+import javax.swing.*;
+import java.rmi.Naming;
 
 public class Client implements Serializable {
     protected Server gameServer;
@@ -15,11 +18,6 @@ public class Client implements Serializable {
     }
 
     public Client() {}
-import javax.swing.*;
-import java.rmi.Naming;
-
-public class Client {
-    private Server gameServer;
 
     public void findGame(String username) {
 
@@ -32,6 +30,13 @@ public class Client {
                     "//localhost:8080/serveurCardGame");
 
             //gameServer.apply(this);
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(null, "Impossible to connect to server, please try again");
+
+        }
+    }
+    
     public void findGame() {
         try {
             gameServer.apply(this);
@@ -42,10 +47,5 @@ public class Client {
 
     public String getName() {
         return name;
-        } catch (Exception e) {
-
-            JOptionPane.showMessageDialog(null, "Impossible to connect to server, please try again");
-
-        }
     }
 }
