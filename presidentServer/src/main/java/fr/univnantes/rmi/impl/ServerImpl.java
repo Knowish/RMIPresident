@@ -1,5 +1,8 @@
-package fr.univnantes.rmi.impl;
+/*package fr.univnantes.rmi.impl;
 
+import fr.univnantes.impl.Card;
+import fr.univnantes.impl.Game;
+import fr.univnantes.impl.Player;
 import fr.univnantes.rmi.inter.Server;
 
 import java.beans.PropertyChangeListener;
@@ -73,4 +76,4 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         this.numberOfPendingPlayers = value;
     }
 
-}
+}*/

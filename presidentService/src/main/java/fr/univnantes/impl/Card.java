@@ -1,4 +1,4 @@
-package fr.univnantes.rmi.impl;
+package fr.univnantes.impl;
 
 import java.io.Serializable;
 

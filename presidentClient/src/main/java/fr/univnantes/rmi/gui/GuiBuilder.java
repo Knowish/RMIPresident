@@ -1,7 +1,5 @@
 package fr.univnantes.rmi.gui;
 
-import fr.univnantes.rmi.impl.Client;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -13,12 +11,10 @@ public class GuiBuilder extends JFrame{
   private final CardLayout cl = new CardLayout();
   private final JPanel cards = new JPanel(cl);
   private final Border border = BorderFactory.createEmptyBorder(200, 400, 200, 400);
-  private Client client;
 
-  public GuiBuilder(Client client) {
+  public GuiBuilder(RmiClient client) {
 
     JPanel contentPane = new JPanel();
-    this.client = client;
     contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
     contentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     setContentPane(contentPane);

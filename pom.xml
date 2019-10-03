@@ -11,6 +11,7 @@
     <modules>
         <module>presidentClient</module>
         <module>presidentServer</module>
+        <module>presidentService</module>
     </modules>
 
     <packaging>pom</packaging>

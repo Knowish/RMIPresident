@@ -1,4 +1,6 @@
-package fr.univnantes.rmi.impl;
+package fr.univnantes.impl;
+
+import fr.univnantes.impl.Card;
 
 import java.util.ArrayList;
 import java.util.List;

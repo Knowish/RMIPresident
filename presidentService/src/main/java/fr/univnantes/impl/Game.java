@@ -1,7 +1,6 @@
-package fr.univnantes.rmi.impl;
+package fr.univnantes.impl;
 
-import fr.univnantes.rmi.impl.Card;
-import fr.univnantes.rmi.impl.Player;
+import fr.univnantes.impl.Card;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;

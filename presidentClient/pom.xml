@@ -20,8 +20,9 @@
     <dependencies>
         <dependency>
             <groupId>org.univ-nantes.shinyhunters</groupId>
-            <artifactId>president-server</artifactId>
+            <artifactId>presidentService</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

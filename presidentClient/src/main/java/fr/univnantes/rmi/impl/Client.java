@@ -1,28 +1,30 @@
-package fr.univnantes.rmi.impl;
+/*package fr.univnantes.rmi.impl;
 
-import fr.univnantes.rmi.inter.Server;
+import fr.univnantes.rmi.inter.RemoteObserver;
+import fr.univnantes.rmi.inter.RmiService;
 import javax.swing.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 
-public class Client
+public class Client extends UnicastRemoteObject implements RemoteObserver
 {
-    private Server gameServer;
+    private RmiService gameServer;
     private UUID identifier;
 
-    public Client() {
+    public Client() throws RemoteException {
         identifier = UUID.randomUUID();
     }
 
-    public boolean findGame(String username) {
+    public boolean findGame(Client client, String username) {
 
         try {
 
-            gameServer = (Server) Naming.lookup(
+            gameServer = (RmiService) Naming.lookup(
                     "//localhost:8080/serveurCardGame");
-            //gameServer.addPropertyChangeListener((PmyPlayer);
-            gameServer.apply(identifier, username);
+            gameServer.addObserver(client);
+            //gameServer.apply(identifier, username);
             JOptionPane.showMessageDialog(null, "Connected to server as " + username);
             System.out.println("Connected to server as " + username);
             return true;
@@ -36,6 +38,23 @@ public class Client
         }
     }
 
-    public Server getGameServer() { return gameServer; }
+    public RmiService getGameServer() { return gameServer; }
 
-}
+    public static void main(String[] args) {
+        try {
+            RmiService remoteService = (RmiService) Naming
+                    .lookup("//localhost:8080/serveurCardGame");
+
+            Client client = new Client();
+            remoteService.addObserver(client);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update(Object observable, Object updateMsg) throws RemoteException {
+        System.out.println("got message:" + updateMsg);
+    }
+
+}*/
