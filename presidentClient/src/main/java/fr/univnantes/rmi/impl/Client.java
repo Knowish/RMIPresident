@@ -10,8 +10,8 @@ public class Client {
 
     public void findGame(String username) {
 
-        Player myPlayer = new Player();
-        myPlayer.setUserName(username);
+        Player myPlayer = new Player(username);
+        //myPlayer.setUserName(username);
 
         try {
 
@@ -19,6 +19,7 @@ public class Client {
                     "//localhost:8080/serveurCardGame");
 
             //gameServer.apply(this);
+            System.out.println("Connected to server as " + myPlayer.getUserName());
 
         } catch (Exception e) {
 

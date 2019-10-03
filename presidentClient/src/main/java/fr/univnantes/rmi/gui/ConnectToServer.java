@@ -6,11 +6,11 @@ import javax.swing.*;
 
 public class ConnectToServer {
 
-    private JTextField welcomeToTheRMITextField;
-    private JTextArea pleaseChooseAUserTextArea;
+    private JLabel welcomeToTheRMITextField;
+    private JLabel pleaseChooseAUserTextArea;
     private JTextField writeUsernameHereTextField;
     private JButton findAGameButton;
-    private JPanel pannel1;
+    private JPanel panel1;
 
     public ConnectToServer(Client client) {
 
@@ -24,8 +24,8 @@ public class ConnectToServer {
 
     }
 
-    public JPanel getPannel1() {
-        return pannel1;
+    public JPanel getPanel1() {
+        return panel1;
     }
 
 }
