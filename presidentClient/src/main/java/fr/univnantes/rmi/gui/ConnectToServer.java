@@ -3,6 +3,8 @@ package fr.univnantes.rmi.gui;
 import fr.univnantes.rmi.impl.Client;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 
 public class ConnectToServer {
 
@@ -12,13 +14,17 @@ public class ConnectToServer {
     private JButton findAGameButton;
     private JPanel panel1;
 
-    public ConnectToServer(Client client) {
+    public ConnectToServer(Client client, Border border, CardLayout cl, JPanel cards) {
+
+        panel1.setBorder(border);
 
         findAGameButton.addActionListener(actionEvent -> {
 
             String username = writeUsernameHereTextField.getText();
 
-            client.findGame(username);
+            if(client.findGame(username)){
+                cl.next(cards);
+            }
 
         });
 
@@ -29,3 +35,4 @@ public class ConnectToServer {
     }
 
 }
+

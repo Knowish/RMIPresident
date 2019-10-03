@@ -1,17 +1,21 @@
 package fr.univnantes.rmi.impl;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class Player implements PropertyChangeListener, Serializable {
 
     private String userName;
     private List<Card> hand;
     private boolean passTurn = false;
+    private int numberOfPendingPlayers;
 
-    public Player(String name) {
-        userName = name;
+    public Player(){
         hand = new ArrayList<>();
+        numberOfPendingPlayers = 1;
     }
 
     public void playCard(Card card) {
@@ -42,4 +46,16 @@ public class Player {
         this.userName = userName;
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        this.setNumberOfPendingPlayers((int) evt.getNewValue());
+    }
+
+    public int getNumberOfPendingPlayers() {
+        return numberOfPendingPlayers;
+    }
+
+    public void setNumberOfPendingPlayers(int numberOfPendingPlayers) {
+        this.numberOfPendingPlayers = numberOfPendingPlayers;
+    }
 }
