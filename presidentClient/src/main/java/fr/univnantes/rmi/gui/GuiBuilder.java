@@ -27,10 +27,6 @@ public class GuiBuilder extends JFrame{
     JPanel panel1 = connectToServerView.getPanel1();
     cards.add(panel1, "First Panel");
 
-    Lobby lobbyView = new Lobby(client, border, cl, cards);
-    JPanel panel2 = lobbyView.getPanell();
-    cards.add(panel2, "Second Panel");
-
     contentPane.add(cards);
 
     cl.show(cards, "First Panel");

@@ -1,21 +1,27 @@
 package fr.univnantes.rmi.impl;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class Player implements PropertyChangeListener, Serializable {
+public class Player extends UnicastRemoteObject implements PropertyChangeListener {
 
+    private UUID identifier;
     private String userName;
     private List<Card> hand;
     private boolean passTurn = false;
     private int numberOfPendingPlayers;
+    private PropertyChangeSupport support;
 
-    public Player(){
+    public Player(UUID identifier, String userName) throws RemoteException {
         hand = new ArrayList<>();
-        numberOfPendingPlayers = 1;
+        support = new PropertyChangeSupport(this);
     }
 
     public void playCard(Card card) {
@@ -56,6 +62,15 @@ public class Player implements PropertyChangeListener, Serializable {
     }
 
     public void setNumberOfPendingPlayers(int numberOfPendingPlayers) {
+        support.firePropertyChange("numberOfPendingPlayers", this.numberOfPendingPlayers, numberOfPendingPlayers);
         this.numberOfPendingPlayers = numberOfPendingPlayers;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
     }
 }

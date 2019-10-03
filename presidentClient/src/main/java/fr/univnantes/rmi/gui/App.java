@@ -4,6 +4,7 @@ import fr.univnantes.rmi.impl.Client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.rmi.RemoteException;
 
 public class App {
 
@@ -17,6 +18,7 @@ public class App {
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
+
             }
         });
     }

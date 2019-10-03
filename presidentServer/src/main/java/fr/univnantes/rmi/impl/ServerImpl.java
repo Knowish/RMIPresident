@@ -6,10 +6,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class ServerImpl extends UnicastRemoteObject implements Server {
 
@@ -25,9 +22,10 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void apply(Player client) throws RemoteException {
+    public void apply(UUID identifier, String username) throws RemoteException {
 
-        pendingPlayers.add(client);
+        Player player = new Player(identifier, username);
+        pendingPlayers.add(player);
         setNumberOfPendingPlayers(numberOfPendingPlayers+1);
         if (pendingPlayers.size() >= 4) {
             List<Player> startingPlayers = new ArrayList<>();
@@ -50,6 +48,16 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             res.append(c.getUserName()).append(" is waiting for a game\n");
         }
         return res.toString();
+    }
+
+    @Override
+    public void playCard(UUID identifier, Card card) throws RemoteException {
+
+    }
+
+    @Override
+    public int getNumberOfPendingPlayers() throws RemoteException {
+        return numberOfPendingPlayers;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {

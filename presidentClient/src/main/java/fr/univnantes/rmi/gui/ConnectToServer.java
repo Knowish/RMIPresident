@@ -5,6 +5,7 @@ import fr.univnantes.rmi.impl.Client;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.rmi.RemoteException;
 
 public class ConnectToServer {
 
@@ -23,7 +24,15 @@ public class ConnectToServer {
             String username = writeUsernameHereTextField.getText();
 
             if(client.findGame(username)){
-                cl.next(cards);
+                try {
+                    Lobby lobbyView = new Lobby(client, border, cl, cards);
+                    JPanel panel2 = lobbyView.getPanell();
+                    cards.add(panel2, "Second Panel");
+                    cl.next(cards);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
             }
 
         });
