@@ -42,9 +42,8 @@ public class Game implements Serializable {
             uselessListOfPlayers.get(i % players.size()).addToHand(deck.get(i));
         }
 
-        int k = 1;
         for(Player p : uselessListOfPlayers) {
-            System.out.println("\nPlayer " + (k++));
+            System.out.println("\nPlayer " + p.getUserName());
             p.getHand();
         }
     }
