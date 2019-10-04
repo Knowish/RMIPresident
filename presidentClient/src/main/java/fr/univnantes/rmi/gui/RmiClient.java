@@ -74,7 +74,8 @@ public class RmiClient extends UnicastRemoteObject implements RemoteObserver {
   @Override
   public void update(Object observable, Object updateMsg)
           throws RemoteException {
-    setWaitingPlayers(this.waitingPlayers + 1);
+    System.out.println("Received a signal from the server");
+    setWaitingPlayers((Integer) updateMsg);
   }
 
   public RmiService getRemoteService() {
@@ -84,5 +85,9 @@ public class RmiClient extends UnicastRemoteObject implements RemoteObserver {
   public void setWaitingPlayers(int value) {
     support.firePropertyChange("waitingPlayers", this.waitingPlayers, value);
     this.waitingPlayers = value;
+  }
+
+  public String getUsername(){
+    return this.username;
   }
 }

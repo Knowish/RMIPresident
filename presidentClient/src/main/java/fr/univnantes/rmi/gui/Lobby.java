@@ -12,11 +12,18 @@ public class Lobby implements PropertyChangeListener {
     private JPanel lobby;
     private JLabel playersFoundCount;
     private JLabel nbWaitingPlayers;
+    private JLabel usernameDisplayed;
     private RmiClient client;
+    private int nbPendingPlayers;
+    private CardLayout cl;
+    private JPanel cards;
 
     public Lobby(RmiClient client, Border border, CardLayout cl, JPanel cards) throws RemoteException {
 
             this.client = client;
+            this.cl = cl;
+            this.cards = cards;
+            usernameDisplayed.setText(client.getUsername());
             lobby.setBorder(border);
             client.addPropertyChangeListener(this);
             nbWaitingPlayers.setText(Integer.toString(client.getRemoteService().getNumberOfPendingPlayers()));
@@ -29,6 +36,14 @@ public class Lobby implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        nbWaitingPlayers.setText(Integer.toString((Integer)evt.getNewValue()));
+        nbPendingPlayers = (Integer)evt.getNewValue();
+        nbWaitingPlayers.setText(Integer.toString(nbPendingPlayers));
+    }
+
+    public void createGameBoardView(){
+        GameBoard gameboardView = new GameBoard();
+        JPanel nextPanel = gameboardView.getPanel1();
+        cards.add(nextPanel, "Third Panel");
+        cl.next(cards);
     }
 }

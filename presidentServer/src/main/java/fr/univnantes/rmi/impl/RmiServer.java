@@ -53,13 +53,14 @@ public class RmiServer extends Observable implements RmiService {
     Player player = new Player(identifier, username);
     pendingPlayers.add(player);
     numberOfPendingPlayers ++ ;
+    /*
     if (pendingPlayers.size() >= 4) {
       List<Player> startingPlayers = new ArrayList<>();
       for (int i = 0; i < 4; ++i) {
         startingPlayers.add(pendingPlayers.remove());
       }
       game = new Game(startingPlayers);
-    }
+    }*/
     setChanged();
     notifyObservers(numberOfPendingPlayers);
   }
