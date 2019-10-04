@@ -3,10 +3,7 @@ package fr.univnantes.impl;
 import fr.univnantes.impl.Card;
 
 import java.io.Serializable;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Game implements Serializable {
     private Queue<Player> players;
@@ -16,10 +13,10 @@ public class Game implements Serializable {
         this.players = new ArrayDeque<>(4);
         this.players.addAll(players);
         this.board = new ArrayList<>();
-        init();
+        distribution();
     }
 
-    public void init() {
+    /*public void init() {
         List<Card> deck = new CardPool().getDeck();
         ArrayList<Player> players1 = new ArrayList<>(players);
         int cardsByPlayer = deck.size()/players.size();
@@ -31,6 +28,22 @@ public class Game implements Serializable {
         }
         int k = 1;
         for(Player p : players1) {
+            System.out.println("\nPlayer " + (k++));
+            p.getHand();
+        }
+    }*/
+
+    private void distribution() {
+        List<Card> deck = new CardPool().getDeck();
+        Collections.shuffle(deck);
+        ArrayList<Player> uselessListOfPlayers = new ArrayList<>(players);
+
+        for (int i = 0; i < deck.size(); ++i) {
+            uselessListOfPlayers.get(i % players.size()).addToHand(deck.get(i));
+        }
+
+        int k = 1;
+        for(Player p : uselessListOfPlayers) {
             System.out.println("\nPlayer " + (k++));
             p.getHand();
         }
