@@ -9,11 +9,20 @@ public class Game implements Serializable {
     private Queue<Player> players;
     private List<Card> board;
 
+    public Game(){
+        this.players = new ArrayDeque<>();
+        this.board = new ArrayList<>();
+    }
+
     public Game(List<Player> players) {
         this.players = new ArrayDeque<>(4);
         this.players.addAll(players);
         this.board = new ArrayList<>();
         distribution();
+    }
+
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 
     /*public void init() {
