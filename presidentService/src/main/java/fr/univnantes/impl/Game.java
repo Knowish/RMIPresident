@@ -11,11 +11,20 @@ public class Game implements Serializable {
     private Queue<PlayerInterface> players;
     private List<Card> board;
 
+    public Game(){
+        this.players = new ArrayDeque<>();
+        this.board = new ArrayList<>();
+    }
+
     public Game(List<PlayerInterface> players) throws RemoteException {
         this.players = new ArrayDeque<>(4);
         this.players.addAll(players);
         this.board = new ArrayList<>();
 //        distribution();
+    }
+
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 
     /*public void init() {
@@ -44,9 +53,8 @@ public class Game implements Serializable {
             uselessListOfPlayers.get(i % players.size()).addToHand(deck.get(i));
         }
 
-        int k = 1;
         for(PlayerInterface p : uselessListOfPlayers) {
-            System.out.println("\nPlayer " + (k++));
+            System.out.println("\nPlayer " + p.getUserName());
             p.getHand();
         }
     }

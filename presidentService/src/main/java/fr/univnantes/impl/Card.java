@@ -14,4 +14,12 @@ public class Card  implements Serializable {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "Card {" +
+                "value = " + value +
+                " \tname = " + name +
+                '}';
+    }
 }

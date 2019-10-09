@@ -1,82 +1,57 @@
 package fr.univnantes.impl;
 
-import fr.univnantes.impl.Card;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static fr.univnantes.impl.ConstUtils.*;
 
 public class CardPool {
     private List<Card> deck;
 
     public CardPool() {
         deck = new ArrayList<>();
-        deck.add(new Card(3, "3 ♦"));
-        deck.add(new Card(3, "3 ♣"));
-        deck.add(new Card(3, "3 ♠"));
-        deck.add(new Card(3, "3 ♥"));
-
-        deck.add(new Card(4, "4 ♦"));
-        deck.add(new Card(4, "4 ♣"));
-        deck.add(new Card(4, "4 ♠"));
-        deck.add(new Card(4, "4 ♥"));
-
-        deck.add(new Card(5, "5 ♦"));
-        deck.add(new Card(5, "5 ♣"));
-        deck.add(new Card(5, "5 ♠"));
-        deck.add(new Card(5, "5 ♥"));
-
-        deck.add(new Card(6, "6 ♦"));
-        deck.add(new Card(6, "6 ♣"));
-        deck.add(new Card(6, "6 ♠"));
-        deck.add(new Card(6, "6 ♥"));
-
-        deck.add(new Card(7, "7 ♦"));
-        deck.add(new Card(7, "7 ♣"));
-        deck.add(new Card(7, "7 ♠"));
-        deck.add(new Card(7, "7 ♥"));
-
-        deck.add(new Card(8, "8 ♦"));
-        deck.add(new Card(8, "8 ♣"));
-        deck.add(new Card(8, "8 ♠"));
-        deck.add(new Card(8, "8 ♥"));
-
-        deck.add(new Card(9, "9 ♦"));
-        deck.add(new Card(9, "9 ♣"));
-        deck.add(new Card(9, "9 ♠"));
-        deck.add(new Card(9, "9 ♥"));
-
-        deck.add(new Card(10, "10 ♦"));
-        deck.add(new Card(10, "10 ♣"));
-        deck.add(new Card(10, "10 ♠"));
-        deck.add(new Card(10, "10 ♥"));
-
-        deck.add(new Card(11, "Valet ♦"));
-        deck.add(new Card(11, "Valet ♣"));
-        deck.add(new Card(11, "Valet ♠"));
-        deck.add(new Card(11, "Valet ♥"));
-
-        deck.add(new Card(12, "Dame ♦"));
-        deck.add(new Card(12, "Dame ♣"));
-        deck.add(new Card(12, "Dame ♠"));
-        deck.add(new Card(12, "Dame ♥"));
-
-        deck.add(new Card(13, "Roi ♦"));
-        deck.add(new Card(13, "Roi ♣"));
-        deck.add(new Card(13, "Roi ♠"));
-        deck.add(new Card(13, "Roi ♥"));
-
-        deck.add(new Card(14, "As ♦"));
-        deck.add(new Card(14, "As ♣"));
-        deck.add(new Card(14, "As ♠"));
-        deck.add(new Card(14, "As ♥"));
-
-        deck.add(new Card(15, "2 ♦"));
-        deck.add(new Card(15, "2 ♣"));
-        deck.add(new Card(15, "2 ♠"));
-        deck.add(new Card(15, "2 ♥"));
+        generateCardPool();
     }
 
     public List<Card> getDeck() {
         return deck;
+    }
+
+    private void generateCardPool() {
+
+        String colors[] = {SPADE, HEART, DIAMOND, CLUB};
+
+        for (String color : colors) {
+            for  (int j = MIN_VALUE_CARD; j < NUMBER_CARDS_PER_COLOR + MIN_VALUE_CARD; j++) { // j : 3 -> 15
+                deck.add(new Card(j, matchValueToName(j) + " " + color));
+            }
+        }
+    }
+
+    private String matchValueToName(int value) {
+
+        String name;
+
+        switch (value) {
+            case 11:
+                name = JACK;
+                break;
+            case 12:
+                name = QUEEN;
+                break;
+            case 13:
+                name = KING;
+                break;
+            case 14:
+                name = ACE;
+                break;
+            case 15:
+                name = "2";
+                break;
+            default:
+                name = String.valueOf(value);
+                break;
+        }
+        return name;
     }
 }
