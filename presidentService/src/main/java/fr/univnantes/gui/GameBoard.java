@@ -1,4 +1,4 @@
-package fr.univnantes.rmi.gui;
+package fr.univnantes.gui;
 
 import javax.swing.*;
 

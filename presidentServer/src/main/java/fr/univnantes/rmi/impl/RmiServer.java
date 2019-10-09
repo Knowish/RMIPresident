@@ -1,13 +1,11 @@
 package fr.univnantes.rmi.impl;
 
-import fr.univnantes.impl.Card;
 import fr.univnantes.impl.Game;
-import fr.univnantes.impl.Player;
-import fr.univnantes.rmi.inter.RemoteObserver;
+import fr.univnantes.rmi.inter.PlayerInterface;
+import fr.univnantes.rmi.inter.RemoteClient;
 import fr.univnantes.rmi.inter.RmiService;
 
 import java.io.Serializable;
-import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -18,16 +16,16 @@ import java.util.*;
 public class RmiServer extends Observable implements RmiService {
 
   private Game game;
-  private Queue<Player> pendingPlayers;
+  private Queue<PlayerInterface> pendingPlayers;
   private int numberOfPendingPlayers;
 
   private class WrappedObserver implements Observer, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private RemoteObserver ro = null;
+    private PlayerInterface ro = null;
 
-    public WrappedObserver(RemoteObserver ro) {
+    public WrappedObserver(PlayerInterface ro) {
       this.ro = ro;
     }
 
@@ -44,25 +42,34 @@ public class RmiServer extends Observable implements RmiService {
 
   }
 
+  //TODO: On ferait pas un petit producteur consomateur ici?
   @Override
-  /*synchronized*/ public void addObserver(RemoteObserver o, UUID identifier, String username) throws RemoteException {
+  /*synchronized*/ public void joinGame(PlayerInterface o) throws RemoteException {
     WrappedObserver mo = new WrappedObserver(o);
     addObserver(mo);
+
     System.out.println("Added observer:" + mo);
 
-    Player player = new Player(identifier, username);
-    pendingPlayers.add(player);
+    pendingPlayers.add((PlayerInterface) o);
     numberOfPendingPlayers ++ ;
-    /*
-    if (pendingPlayers.size() >= 4) {
-      List<Player> startingPlayers = new ArrayList<>();
-      for (int i = 0; i < 4; ++i) {
-        startingPlayers.add(pendingPlayers.remove());
-      }
-      game = new Game(startingPlayers);
-    }*/
+
     setChanged();
     notifyObservers(numberOfPendingPlayers);
+
+    if (pendingPlayers.size() >= 4) {
+
+      System.out.println("On a tous les joueurs");
+      List<PlayerInterface> startingPlayers = new ArrayList<>();
+
+      for (int i = 0; i < 4; ++i) {
+        PlayerInterface currentPlayer = pendingPlayers.remove();
+        startingPlayers.add(currentPlayer);
+        currentPlayer.startGame();
+      }
+
+      //game = new Game(startingPlayers);
+    }
+
   }
 
   @Override

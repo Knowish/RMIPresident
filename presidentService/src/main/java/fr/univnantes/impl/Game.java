@@ -1,19 +1,21 @@
 package fr.univnantes.impl;
 
 import fr.univnantes.impl.Card;
+import fr.univnantes.rmi.inter.PlayerInterface;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class Game implements Serializable {
-    private Queue<Player> players;
+    private Queue<PlayerInterface> players;
     private List<Card> board;
 
-    public Game(List<Player> players) {
+    public Game(List<PlayerInterface> players) throws RemoteException {
         this.players = new ArrayDeque<>(4);
         this.players.addAll(players);
         this.board = new ArrayList<>();
-        distribution();
+//        distribution();
     }
 
     /*public void init() {
@@ -33,17 +35,17 @@ public class Game implements Serializable {
         }
     }*/
 
-    private void distribution() {
+    private void distribution() throws RemoteException {
         List<Card> deck = new CardPool().getDeck();
         Collections.shuffle(deck);
-        ArrayList<Player> uselessListOfPlayers = new ArrayList<>(players);
+        ArrayList<PlayerInterface> uselessListOfPlayers = new ArrayList<>(players);
 
         for (int i = 0; i < deck.size(); ++i) {
             uselessListOfPlayers.get(i % players.size()).addToHand(deck.get(i));
         }
 
         int k = 1;
-        for(Player p : uselessListOfPlayers) {
+        for(PlayerInterface p : uselessListOfPlayers) {
             System.out.println("\nPlayer " + (k++));
             p.getHand();
         }
