@@ -19,4 +19,12 @@ public interface PlayerInterface extends Remote {
     void startGame() throws RemoteException;
 
     void update (Object observable, Object updateMsg) throws RemoteException;
+
+    Card playCard(Card lastCard) throws RemoteException;
+
+    boolean isPassTurn() throws RemoteException;
+
+    void setPassTurn(boolean passTurn) throws RemoteException;
+
+    void setMyTurn(boolean myTurn) throws RemoteException;
 }
