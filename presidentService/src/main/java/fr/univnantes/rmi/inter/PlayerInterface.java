@@ -1,11 +1,10 @@
 package fr.univnantes.rmi.inter;
 
 import fr.univnantes.impl.Card;
-import fr.univnantes.impl.Player;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.UUID;
+import java.util.List;
 
 public interface PlayerInterface extends Remote {
 
@@ -15,7 +14,7 @@ public interface PlayerInterface extends Remote {
 
     void addToHand(Card card) throws RemoteException;
 
-    void getHand() throws RemoteException;
+    List<Card> getHand() throws RemoteException;
 
     void startGame() throws RemoteException;
 
