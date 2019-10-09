@@ -4,13 +4,8 @@ import javax.swing.*;
 
 public class GameBoard {
     private JPanel panel1;
-    private JButton buttonHelloWorld;
 
     public GameBoard() {
-
-        buttonHelloWorld.addActionListener(actionEvent -> {
-            JOptionPane.showMessageDialog(null, "Hello world!");
-        });
 
     }
 
