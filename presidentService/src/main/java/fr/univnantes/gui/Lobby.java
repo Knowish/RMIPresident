@@ -60,7 +60,7 @@ public class Lobby /*implements PropertyChangeListener*/ {
         nbWaitingPlayers.setText(waitingPlayersNumber);
     }
 
-    public void createGameBoardView(){
+    public void changeViewToBoardgame() {
         System.out.println("Je crée la gameBoard");
         GameBoard gameboardView = new GameBoard();
         JPanel nextPanel = gameboardView.getPanel1();

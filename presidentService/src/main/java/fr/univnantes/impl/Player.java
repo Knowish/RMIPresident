@@ -23,7 +23,6 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     private boolean passTurn;
     private int numberOfPendingPlayers;
     private PropertyChangeSupport support;
-    private boolean startGame;
     private boolean myTurn = false;
     private Lobby lobby;
     private RmiService remoteService;
@@ -33,14 +32,12 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         hand = new ArrayList<>();
         support = new PropertyChangeSupport(this);
         passTurn = false;
-        startGame = false;
     }
 
     public Player()  throws RemoteException{
         hand = new ArrayList<>();
         support = new PropertyChangeSupport(this);
         passTurn = false;
-        startGame = false;
     }
 
     public boolean findGame() {
@@ -113,9 +110,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     @Override
     public void startGame() throws RemoteException {
         System.out.println("On devrait commencer la partie mdr");
-
-        support.firePropertyChange("gameInit", this.startGame, true);
-        this.startGame = true;
+        lobby.changeViewToBoardgame();
     }
 
     @Override
