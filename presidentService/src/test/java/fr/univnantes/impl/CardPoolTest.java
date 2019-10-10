@@ -1,4 +1,4 @@
-package fr.univnantes.impl;
+/*package fr.univnantes.impl;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,17 +19,17 @@ class CardPoolTest {
 
     @Test
     void poolContentTest() {
-        assertEquals(52, pool.getDeck().size());
+        assertEquals(52, pool.getBoard().size());
 
-        for (Card card : pool.getDeck()) {
+        for (Card card : pool.getBoard()) {
             System.out.println(card);
         }
 
-        Collections.shuffle(pool.getDeck());
+        Collections.shuffle(pool.getBoard());
         System.out.println("\n\nSHUFFLE\n\n");
 
-        for (Card card : pool.getDeck()) {
+        for (Card card : pool.getBoard()) {
             System.out.println(card);
         }
     }
-}
+}*/

@@ -1,61 +1,78 @@
 package fr.univnantes.impl;
 
-import fr.univnantes.impl.Card;
 import fr.univnantes.rmi.inter.PlayerInterface;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.*;
 
-public class Game implements Serializable {
-    private Queue<PlayerInterface> players;
-    private List<Card> board;
+import static fr.univnantes.impl.ConstUtils.*;
 
-    public Game(){
-        this.players = new ArrayDeque<>();
-        this.board = new ArrayList<>();
-    }
+abstract class Game implements Serializable {
 
-    public Game(List<PlayerInterface> players) throws RemoteException {
-        this.players = new ArrayDeque<>(4);
+    protected List<PlayerInterface> players = new ArrayList<>();
+    protected List<Card> board = new ArrayList<>();
+
+    abstract void playGame() throws RemoteException;
+    abstract boolean isDone() throws RemoteException;
+    abstract PlayerInterface identifyFirstPlayer() throws RemoteException;
+
+    public Game(){}
+
+    public Game(List<PlayerInterface> players) {
         this.players.addAll(players);
-        this.board = new ArrayList<>();
-//        distribution();
     }
 
-    public void addPlayer(Player player) {
-        players.add(player);
+    public final void addPlayer(PlayerInterface player) {
+        this.players.add(player);
     }
 
-    /*public void init() {
-        List<Card> deck = new CardPool().getDeck();
-        ArrayList<Player> players1 = new ArrayList<>(players);
-        int cardsByPlayer = deck.size()/players.size();
-        for (int i = 0; i < cardsByPlayer; ++i) {
-            for (int j = 0; j < players.size(); ++j) {
-                int index = (int) (Math.random()*deck.size());
-                players1.get(j).addToHand(deck.remove(index));
+    public final void initializeGame() throws RemoteException {
+        generateCardPool();
+        distribution();
+    }
+
+    public void distribution() throws RemoteException {
+        for (int i = 0; i < this.board.size(); ++i) {
+            this.players.get(i % this.players.size()).addToHand(this.board.remove(i));
+        }
+    }
+
+    public void generateCardPool() {
+
+        String[] colors = {SPADE, HEART, DIAMOND, CLUB};
+
+        for (String color : colors) {
+            for  (int i = MIN_VALUE_CARD; i < NUMBER_CARDS_PER_COLOR + MIN_VALUE_CARD; ++i) { // i : 3 -> 15
+                this.board.add(new Card(i, matchValueToName(i) + " " + color));
             }
         }
-        int k = 1;
-        for(Player p : players1) {
-            System.out.println("\nPlayer " + (k++));
-            p.getHand();
-        }
-    }*/
-
-    private void distribution() throws RemoteException {
-        List<Card> deck = new CardPool().getDeck();
-        Collections.shuffle(deck);
-        ArrayList<PlayerInterface> uselessListOfPlayers = new ArrayList<>(players);
-
-        for (int i = 0; i < deck.size(); ++i) {
-            uselessListOfPlayers.get(i % players.size()).addToHand(deck.get(i));
-        }
-
-        for(PlayerInterface p : uselessListOfPlayers) {
-            System.out.println("\nPlayer " + p.getUserName());
-            p.getHand();
-        }
+        Collections.shuffle(this.board);
     }
+
+    private String matchValueToName(int value) {
+        String name;
+        switch (value) {
+            case 11:
+                name = JACK;
+                break;
+            case 12:
+                name = QUEEN;
+                break;
+            case 13:
+                name = KING;
+                break;
+            case 14:
+                name = ACE;
+                break;
+            case 15:
+                name = "2";
+                break;
+            default:
+                name = String.valueOf(value);
+                break;
+        }
+        return name;
+    }
+
 }

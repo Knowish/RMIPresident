@@ -66,13 +66,25 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         }
     }
 
-    public void playCard(Card card) {
+    @Override
+    public Card playCard(Card lastCard) throws RemoteException {
+        Card chosenCard = lastCard;
         if (!passTurn) {
-            hand.remove(card);
+            while(chosenCard.compareTo(lastCard) < 0 && !passTurn) {
+                chosenCard = chooseCard();
+            }
+            hand.remove(chosenCard);
         }
+        return chosenCard;
     }
 
-    public void addToHand(Card card) {
+    public Card chooseCard() {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public void addToHand(Card card) throws RemoteException {
         hand.add(card);
     }
 
@@ -80,13 +92,25 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         passTurn = true;
     }
 
-    public void getHand() {
-        for (Card c : hand) {
-            System.out.println(c.getName());
-        }
+    @Override
+    public boolean isPassTurn() throws RemoteException {
+        return passTurn;
     }
 
+    @Override
+    public void setPassTurn(boolean passTurn) throws RemoteException {
+        this.passTurn = passTurn;
+    }
 
+    @Override
+    public void setMyTurn(boolean myTurn) throws RemoteException {
+        this.myTurn = myTurn;
+    }
+
+    @Override
+    public List<Card> getHand() throws RemoteException {
+        return hand;
+    }
 
     @Override
     public String getUserName() throws RemoteException {
