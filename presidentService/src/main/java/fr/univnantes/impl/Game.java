@@ -34,8 +34,9 @@ abstract class Game implements Serializable {
 
     public void distribution() throws RemoteException {
         for (int i = 0; i < this.board.size(); ++i) {
-            this.players.get(i % this.players.size()).addToHand(this.board.remove(i));
+            this.players.get(i % this.players.size()).addToHand(this.board.get(i));
         }
+        this.board.clear();
     }
 
     public void generateCardPool() {
@@ -73,6 +74,15 @@ abstract class Game implements Serializable {
                 break;
         }
         return name;
+    }
+
+
+    public List<PlayerInterface> getPlayers() {
+        return players;
+    }
+
+    public List<Card> getBoard() {
+        return board;
     }
 
 }
