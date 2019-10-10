@@ -22,7 +22,7 @@ public class Lobby /*implements PropertyChangeListener*/ {
     public Lobby(Player player, Border border, CardLayout cl, JPanel cards) throws RemoteException {
 
             //this.client = client;
-        this.player = player;
+            this.player = player;
             this.cl = cl;
             this.cards = cards;
             usernameDisplayed.setText(player.getUserName());
@@ -60,9 +60,9 @@ public class Lobby /*implements PropertyChangeListener*/ {
         nbWaitingPlayers.setText(waitingPlayersNumber);
     }
 
-    public void changeViewToBoardgame() {
+    public void changeViewToBoardgame() throws RemoteException {
         System.out.println("Je crée la gameBoard");
-        GameBoard gameboardView = new GameBoard();
+        GameBoard gameboardView = new GameBoard(player);
         JPanel nextPanel = gameboardView.getPanel1();
         cards.add(nextPanel, "Third Panel");
         cl.next(cards);

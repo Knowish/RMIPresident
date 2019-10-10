@@ -26,18 +26,23 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     private boolean myTurn = false;
     private Lobby lobby;
     private RmiService remoteService;
+    private int orderOfPlay; //the number correspond to the place of the player around the table 0 -> 1 -> 2 -> 3
+    private List<String> opponentsNames;
+
 
     public Player(String userName) throws RemoteException {
         this.userName = userName;
         hand = new ArrayList<>();
         support = new PropertyChangeSupport(this);
         passTurn = false;
+        opponentsNames = new ArrayList<>();
     }
 
     public Player()  throws RemoteException{
         hand = new ArrayList<>();
         support = new PropertyChangeSupport(this);
         passTurn = false;
+        opponentsNames = new ArrayList<>();
     }
 
     public boolean findGame() {
@@ -140,5 +145,25 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
     }
+
+    public int getOrderOfPlay() {
+        return orderOfPlay;
+    }
+
+    @Override
+    public void setOrderOfPlay(int orderOfPlay) throws RemoteException {
+        this.orderOfPlay = orderOfPlay;
+    }
+
+    @Override
+    public void addOpponentsName(String opponentName) throws RemoteException {
+        opponentsNames.add(opponentName);
+    }
+
+    public List<String> getOpponentsNames() {
+        return opponentsNames;
+    }
+
+
 
 }

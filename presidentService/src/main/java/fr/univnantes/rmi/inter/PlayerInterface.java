@@ -20,4 +20,8 @@ public interface PlayerInterface extends Remote {
     void startGame() throws RemoteException;
 
     void update (Object observable, Object updateMsg) throws RemoteException;
+
+    void setOrderOfPlay(int orderOfPlay) throws RemoteException;
+
+    void addOpponentsName(String opponentName) throws RemoteException;
 }

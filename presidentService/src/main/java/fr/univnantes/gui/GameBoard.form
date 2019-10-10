@@ -24,7 +24,7 @@
           <text value="Des boutons ici?"/>
         </properties>
       </component>
-      <component id="78332" class="javax.swing.JLabel">
+      <component id="78332" class="javax.swing.JLabel" binding="player3Name">
         <constraints>
           <grid row="0" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -48,7 +48,7 @@
           <text value="Ma bite"/>
         </properties>
       </component>
-      <component id="c8de0" class="javax.swing.JLabel">
+      <component id="c8de0" class="javax.swing.JLabel" binding="myName">
         <constraints>
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -56,7 +56,7 @@
           <text value="Des trucs???"/>
         </properties>
       </component>
-      <component id="6fa94" class="javax.swing.JLabel">
+      <component id="6fa94" class="javax.swing.JLabel" binding="player2Name">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -72,7 +72,7 @@
           <text value="Le Tas"/>
         </properties>
       </component>
-      <component id="c30c2" class="javax.swing.JLabel">
+      <component id="c30c2" class="javax.swing.JLabel" binding="player4Name">
         <constraints>
           <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
