@@ -1,8 +1,6 @@
 package fr.univnantes.rmi.impl;
 
-import fr.univnantes.impl.Game;
 import fr.univnantes.rmi.inter.PlayerInterface;
-import fr.univnantes.rmi.inter.RemoteClient;
 import fr.univnantes.rmi.inter.RmiService;
 
 import java.io.Serializable;
@@ -15,7 +13,6 @@ import java.util.*;
 
 public class RmiServer extends Observable implements RmiService {
 
-    private Game game;
     private List<PlayerInterface> pendingPlayers;
     private int numberOfPendingPlayers;
 
@@ -23,7 +20,7 @@ public class RmiServer extends Observable implements RmiService {
 
         private static final long serialVersionUID = 1L;
 
-        private PlayerInterface ro = null;
+        private PlayerInterface ro;
 
         public WrappedObserver(PlayerInterface ro) {
             this.ro = ro;
