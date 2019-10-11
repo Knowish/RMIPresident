@@ -25,13 +25,15 @@ public class PlayerTest {
     void creationPlayerTest() throws RemoteException {
         assertEquals("Player_de_base",player.getUserName());
         assertTrue(player.getHand().isEmpty());
-        assertTrue(player.getOpponentsNames().isEmpty());
-        player.addOpponentsName("Tadaronne");
-        assertEquals("Tadaronne",player.getOpponentsNames().get(0));
+        assertTrue(player.getOpponents().isEmpty());
+        Player opponent = new Player();
+        opponent.setUserName("Tadaronne");
+        player.addOpponent(opponent);
+        assertEquals("Tadaronne",player.getOpponents().get(0).getUserName());
     }
 
     @Test
-    void addPlayCardTest() throws RemoteException {
+    void addPlayCardTest() throws RemoteException, InterruptedException {
         Card cardtest = new Card(3,"Coeur");
         player.addToHand(cardtest);
         assertFalse(player.getHand().isEmpty());
