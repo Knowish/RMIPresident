@@ -76,4 +76,13 @@ abstract class Game implements Serializable {
         return name;
     }
 
+
+    public List<PlayerInterface> getPlayers() {
+        return players;
+    }
+
+    public List<Card> getBoard() {
+        return board;
+    }
+
 }
