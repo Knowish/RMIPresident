@@ -1,6 +1,7 @@
 package fr.univnantes.rmi.inter;
 
 import fr.univnantes.impl.Card;
+import fr.univnantes.impl.Player;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -22,14 +23,16 @@ public interface PlayerInterface extends Remote {
 
     void setOrderOfPlay(int orderOfPlay) throws RemoteException;
 
-    void addOpponentsName(String opponentName) throws RemoteException;
+    void addOpponent(PlayerInterface opponent) throws RemoteException;
 
 
-    Card playCard(Card lastCard) throws RemoteException;
+    Card playCard(Card lastCard) throws RemoteException, InterruptedException;
 
     boolean isPassTurn() throws RemoteException;
 
     void setPassTurn(boolean passTurn) throws RemoteException;
 
     void setMyTurn(boolean myTurn) throws RemoteException;
+
+    boolean isMyTurn() throws RemoteException;
 }

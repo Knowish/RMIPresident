@@ -13,7 +13,7 @@ abstract class Game implements Serializable {
     protected List<PlayerInterface> players = new ArrayList<>();
     protected List<Card> board = new ArrayList<>();
 
-    abstract void playGame() throws RemoteException;
+    abstract void playGame() throws RemoteException, InterruptedException;
     abstract boolean isDone() throws RemoteException;
     abstract PlayerInterface identifyFirstPlayer() throws RemoteException;
 
@@ -34,8 +34,9 @@ abstract class Game implements Serializable {
 
     public void distribution() throws RemoteException {
         for (int i = 0; i < this.board.size(); ++i) {
-            this.players.get(i % this.players.size()).addToHand(this.board.remove(i));
+            this.players.get(i % this.players.size()).addToHand(this.board.get(i));
         }
+        this.board.clear();
     }
 
     public void generateCardPool() {

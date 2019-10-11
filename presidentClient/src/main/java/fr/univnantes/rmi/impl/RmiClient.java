@@ -11,52 +11,52 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RmiClient extends UnicastRemoteObject implements RemoteClient {
 
-  private int waitingPlayers;
-  private PropertyChangeSupport support;
+    private int waitingPlayers;
+    private PropertyChangeSupport support;
 
-  protected RmiClient() throws RemoteException {
-    super();
-    support = new PropertyChangeSupport(this);
-  }
-
-  public void addPropertyChangeListener(PropertyChangeListener pcl) {
-    support.addPropertyChangeListener(pcl);
-  }
-
-  public void removePropertyChangeListener(PropertyChangeListener pcl) {
-    support.removePropertyChangeListener(pcl);
-  }
-
-  public static void main(String[] args) {
-
-    try {
-
-      RmiClient client = new RmiClient();
-      Player myPlayer = new Player();
-      GuiBuilder frame = new GuiBuilder(myPlayer);
-
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.pack();
-      frame.setLocationRelativeTo(null);
-      frame.setVisible(true);
-
-
-    } catch (Exception ex) {
-      ex.printStackTrace();
+    protected RmiClient() throws RemoteException {
+        super();
+        support = new PropertyChangeSupport(this);
     }
-  }
 
-  @Override
-  public void update(Object observable, Object updateMsg)
-          throws RemoteException {
-    System.out.println("Received a signal from the server");
-    setWaitingPlayers((Integer) updateMsg);
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
 
-  }
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
+    }
 
-  public void setWaitingPlayers(int value) {
-    support.firePropertyChange("waitingPlayers", this.waitingPlayers, value);
-    this.waitingPlayers = value;
-  }
+    public static void main(String[] args) {
+
+        try {
+
+            RmiClient client = new RmiClient();
+            Player myPlayer = new Player();
+            GuiBuilder frame = new GuiBuilder(myPlayer);
+
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update(Object observable, Object updateMsg)
+            throws RemoteException {
+        System.out.println("Received a signal from the server");
+        setWaitingPlayers((Integer) updateMsg);
+
+    }
+
+    public void setWaitingPlayers(int value) {
+        support.firePropertyChange("waitingPlayers", this.waitingPlayers, value);
+        this.waitingPlayers = value;
+    }
 
 }

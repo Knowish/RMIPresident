@@ -63,6 +63,7 @@ public class Lobby /*implements PropertyChangeListener*/ {
     public void changeViewToBoardgame() throws RemoteException {
         System.out.println("Je crée la gameBoard");
         GameBoard gameboardView = new GameBoard(player);
+        player.setGameBoard(gameboardView);
         JPanel nextPanel = gameboardView.getPanel1();
         cards.add(nextPanel, "Third Panel");
         cl.next(cards);

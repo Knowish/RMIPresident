@@ -1,5 +1,5 @@
 package fr.univnantes.rmi.impl;
-
+import fr.univnantes.impl.President;
 import fr.univnantes.rmi.inter.PlayerInterface;
 import fr.univnantes.rmi.inter.RmiService;
 
@@ -15,6 +15,7 @@ public class RmiServer extends Observable implements RmiService {
 
     private List<PlayerInterface> pendingPlayers;
     private int numberOfPendingPlayers;
+    private final int NB_PLAYERS = 4; //the maximum of players in a game
 
     private class WrappedObserver implements Observer, Serializable {
 
@@ -53,9 +54,10 @@ public class RmiServer extends Observable implements RmiService {
         setChanged();
         notifyObservers(numberOfPendingPlayers);
 
-        if (pendingPlayers.size() >= 4) {
+        if (pendingPlayers.size() >= NB_PLAYERS) {
             List<PlayerInterface> startingPlayers = initGame();
-            //game = new Game(startingPlayers);
+            President game = new President(startingPlayers);
+            //game.playGame();
         }
 
     }
@@ -66,23 +68,23 @@ public class RmiServer extends Observable implements RmiService {
         List<PlayerInterface> startingPlayers = new ArrayList<>();
 
         //premiere boucle pour definir le nom des adversaires pour chaque joueur
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < NB_PLAYERS; ++i) {
             PlayerInterface currentPlayer = pendingPlayers.get(i);
 
             currentPlayer.setOrderOfPlay(i);
 
-            for (int j=0; j<4; ++j){
-                currentPlayer.addOpponentsName(pendingPlayers.get((i+1) %4).getUserName());
-                currentPlayer.addOpponentsName(pendingPlayers.get((i+2) %4).getUserName());
-                currentPlayer.addOpponentsName(pendingPlayers.get((i+3) %4).getUserName());
+            for (int j=0; j< NB_PLAYERS ; ++j){
+                currentPlayer.addOpponent(pendingPlayers.get((i+1) % 4));
+                currentPlayer.addOpponent(pendingPlayers.get((i+2) % 4));
+                currentPlayer.addOpponent(pendingPlayers.get((i+3) % 4));
             }
 
             startingPlayers.add(currentPlayer);
 
         }
 
-        //deuxieme boucle pour leur dire de commencer 0 jouer et les enlever de la liste des joueurs en attente
-        for (int i = 0; i < 4; ++i) {
+        //deuxieme boucle pour leur dire de commencer à jouer et les enlever de la liste des joueurs en attente
+        for (int i = 0; i < NB_PLAYERS ; ++i) {
             PlayerInterface currentPlayer = pendingPlayers.remove(0);
             currentPlayer.startGame();
         }
@@ -106,7 +108,7 @@ public class RmiServer extends Observable implements RmiService {
         public void run() {
             while (true) {
             }
-        };
+        }
     };
 
     private static final long serialVersionUID = 1L;

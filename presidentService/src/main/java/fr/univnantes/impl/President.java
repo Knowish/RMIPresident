@@ -9,7 +9,7 @@ import java.util.List;
 import static fr.univnantes.impl.ConstUtils.HEART;
 import static fr.univnantes.impl.ConstUtils.QUEEN;
 
-public class President extends Game {
+public class President extends Game implements Runnable {
 
     private List<PlayerInterface> winOrder = new ArrayList<>();
 
@@ -19,12 +19,14 @@ public class President extends Game {
 
     public President(List<PlayerInterface> players) {
         super(players);
+        new Thread(this).start();
     }
 
     @Override
-    public void playGame() throws RemoteException {
+    public void playGame() throws RemoteException, InterruptedException {
         initializeGame();
         int i = this.players.indexOf(identifyFirstPlayer());
+        System.out.println(this.board.toString());
         System.out.println("Le board doit être vide pour commencer : " + this.board.isEmpty());
         while(!isDone()) {
             playerPlay(i);
@@ -53,20 +55,28 @@ public class President extends Game {
         return hasTheHand;
     }
 
-    public void playerPlay(int playerNumber) throws RemoteException {
+    public void playerPlay(int playerNumber) throws RemoteException, InterruptedException {
         PlayerInterface currentPlayer = this.players.get(playerNumber);
+        System.out.println(currentPlayer.getUserName());
+        currentPlayer.setMyTurn(true);
         Card lastCardOnBoard;
 
-        if (allPlayersPassTurn()) //Just to fix a tricky case
+        if (allPlayersPassTurn()) { //Just to fix a tricky case
             cleanGame();
+            System.out.println("Ok4");
+        }
+        System.out.println("Ok5");
 
         if (!currentPlayer.isPassTurn()
                 && !currentPlayer.getHand().isEmpty()) {
+            System.out.println("Ok1");
 
             if (!this.board.isEmpty()) {
                 lastCardOnBoard = this.board.get(this.board.size() - 1);
+                System.out.println("Ok2");
             } else {
                 lastCardOnBoard = new Card(0, "");
+                System.out.println("Ok3");
             }
             Card playedCard = currentPlayer.playCard(lastCardOnBoard);
 
@@ -127,4 +137,12 @@ public class President extends Game {
         return gameBlocked;
     }
 
+    @Override
+    public void run() {
+        try {
+            playGame();
+        } catch (RemoteException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
