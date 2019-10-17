@@ -74,17 +74,8 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
 
     @Override
     public Card playCard(Card lastCard) throws RemoteException, InterruptedException {
-        Card chosenCard = lastCard;
-        if (!passTurn) {
-
-            do {
-                chosenCard = chooseCard(chosenCard);
-
-            } while(chosenCard.compareTo(lastCard) < 0 || !passTurn);
-
-            myTurn = false;
-            hand.remove(chosenCard);
-        }
+        Card chosenCard = chooseCard(lastCard);
+        myTurn = false;
         return chosenCard;
     }
 
@@ -96,8 +87,37 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
      */
     public Card chooseCard(Card lastCard) throws InterruptedException, RemoteException {
 
-        gameBoard.promptUserChoice();
-        return lastCard;
+        Card chosenCard = lastCard;
+        List<Card> cardsICanPlay = this.cardsICanPlay(chosenCard);
+
+        String cardName = gameBoard.promptCardChoice(cardsICanPlay);
+
+        if(cardName==null){
+            pass();
+        }
+
+        chosenCard = findCardWithName(cardName);
+        hand.remove(chosenCard);
+/*
+        if(gameBoard.promptUserChoice()){
+            String cardName = gameBoard.promptCardChoice(cardsICanPlay);
+
+            chosenCard = findCardWithName(cardName);
+            hand.remove(chosenCard);
+        }
+        */
+
+        return chosenCard;
+    }
+
+    private Card findCardWithName(String cardName) {
+        Card res = null;
+        for (Card card : hand ){
+            if (card.getName().equals(cardName)){
+                res = card;
+            }
+        }
+        return res;
     }
 
     @Override
@@ -216,7 +236,20 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         this.gameBoard = gameBoard;
     }
 
+    /**
+     * return the list of the cards the players have in its hand and that are playable ( >= to the last card played )
+     * @param lastCardPlayed
+     * @return
+     */
+    public List<Card> cardsICanPlay(Card lastCardPlayed){
+        List<Card> playableCards = new ArrayList<>();
 
-
+        for (Card cardInMyHand : hand ){
+            if (cardInMyHand.getValue() >= lastCardPlayed.getValue() ){
+                playableCards.add(cardInMyHand);
+            }
+        }
+        return  playableCards;
+    }
 
 }
