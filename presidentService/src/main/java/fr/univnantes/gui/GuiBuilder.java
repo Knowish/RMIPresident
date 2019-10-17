@@ -27,6 +27,8 @@ public class GuiBuilder extends JFrame{
 
     contentPane.add(cards);
 
+    getRootPane().setDefaultButton(connectToServerView.getFindAGameButton());
+
     cl.show(cards, "First Panel");
   }
 }

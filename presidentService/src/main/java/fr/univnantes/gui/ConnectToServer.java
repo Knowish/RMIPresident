@@ -49,5 +49,9 @@ public class ConnectToServer {
         return panel1;
     }
 
+    public JButton getFindAGameButton() {
+        return findAGameButton;
+    }
+
 }
 
