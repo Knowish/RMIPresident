@@ -21,10 +21,7 @@ public interface PlayerInterface extends Remote {
 
     void update (Object observable, Object updateMsg) throws RemoteException;
 
-    void setOrderOfPlay(int orderOfPlay) throws RemoteException;
-
     void addOpponent(PlayerInterface opponent) throws RemoteException;
-
 
     Card playCard(Card lastCard) throws RemoteException, InterruptedException;
 
@@ -35,4 +32,6 @@ public interface PlayerInterface extends Remote {
     void setMyTurn(boolean myTurn) throws RemoteException;
 
     boolean isMyTurn() throws RemoteException;
+
+    void updateWhosPlaying() throws RemoteException;
 }

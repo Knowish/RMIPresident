@@ -29,7 +29,13 @@ public class President extends Game implements Runnable {
         System.out.println(this.board.toString());
         System.out.println("Le board doit être vide pour commencer : " + this.board.isEmpty());
         while(!isDone()) {
-            playerPlay(i);
+            PlayerInterface currentPlayer = this.players.get(i);
+            System.out.println(currentPlayer.getUserName());
+            currentPlayer.setMyTurn(true);
+            for(PlayerInterface player : players){
+                player.updateWhosPlaying();
+            }
+            playerPlay(currentPlayer);
             i = (i+1) % this.players.size();
         }
     }
@@ -55,28 +61,21 @@ public class President extends Game implements Runnable {
         return hasTheHand;
     }
 
-    public void playerPlay(int playerNumber) throws RemoteException, InterruptedException {
-        PlayerInterface currentPlayer = this.players.get(playerNumber);
-        System.out.println(currentPlayer.getUserName());
-        currentPlayer.setMyTurn(true);
+    public void playerPlay(PlayerInterface currentPlayer) throws RemoteException, InterruptedException {
+
         Card lastCardOnBoard;
 
         if (allPlayersPassTurn()) { //Just to fix a tricky case
             cleanGame();
-            System.out.println("Ok4");
         }
-        System.out.println("Ok5");
 
         if (!currentPlayer.isPassTurn()
                 && !currentPlayer.getHand().isEmpty()) {
-            System.out.println("Ok1");
 
             if (!this.board.isEmpty()) {
                 lastCardOnBoard = this.board.get(this.board.size() - 1);
-                System.out.println("Ok2");
             } else {
                 lastCardOnBoard = new Card(0, "");
-                System.out.println("Ok3");
             }
             Card playedCard = currentPlayer.playCard(lastCardOnBoard);
 
@@ -97,10 +96,12 @@ public class President extends Game implements Runnable {
                                 || noPlayersRemaining(currentPlayer))) {
                     //The player plays a 2, or formed a square, or everyone passed his turn
                     cleanGame();
-                    playerPlay(playerNumber);//Play again if you have taken over
+                    playerPlay(currentPlayer);//Play again if you have taken over
                 }
             }
         }
+
+        currentPlayer.setMyTurn(false);
 
     }
 

@@ -22,25 +22,16 @@ public class GameBoard {
     private JLabel myTurn;
     private JLabel turnPlayer2;
     private JLabel turnPlayer4;
+    private List<PlayerInterface> opponents;
 
     public GameBoard(Player player) throws RemoteException {
         this.player = player;
-        List<PlayerInterface> opponents = player.getOpponents();
+        opponents = player.getOpponents();
 
         myName.setText(player.getUserName());
         player2Name.setText(opponents.get(0).getUserName());
         player3Name.setText(opponents.get(1).getUserName());
         player4Name.setText(opponents.get(2).getUserName());
-
-        if(player.isMyTurn()){
-            myTurn.setText("My turn");
-        } else if (opponents.get(0).isMyTurn()){
-            turnPlayer2.setText("His turn");
-        } else if (opponents.get(1).isMyTurn()){
-            turnPlayer3.setText("His turn");
-        } else if (opponents.get(2).isMyTurn()) { //TODO:Cette ligne est que pour les tests, faudra l'enlever
-            turnPlayer4.setText("His turn");
-        }
 
         passButton.addActionListener(actionEvent -> {
             try {
@@ -65,6 +56,45 @@ public class GameBoard {
         JOptionPane.showMessageDialog(panel1,
                 "Do you want to pass?");
         player.pass();
+    }
+
+    public void displayWhosPlaying(){
+
+        try {
+            if(player.isMyTurn()){
+
+                myTurn.setText("My turn");
+                turnPlayer2.setText("");
+                turnPlayer3.setText("");
+                turnPlayer4.setText("");
+
+            } else if (opponents.get(0).isMyTurn()){
+
+                myTurn.setText("");
+                turnPlayer2.setText("His turn");
+                turnPlayer3.setText("");
+                turnPlayer4.setText("");
+
+            } else if (opponents.get(1).isMyTurn()){
+
+
+                myTurn.setText("");
+                turnPlayer2.setText("");
+                turnPlayer3.setText("His turn");
+                turnPlayer4.setText("");
+
+            } else if (opponents.get(2).isMyTurn()) { //TODO:Cette ligne est que pour les tests, faudra l'enlever
+
+                myTurn.setText("");
+                turnPlayer2.setText("");
+                turnPlayer3.setText("");
+                turnPlayer4.setText("His turn");
+
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

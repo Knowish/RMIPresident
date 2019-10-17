@@ -182,6 +182,11 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         return myTurn;
     }
 
+    @Override
+    public void updateWhosPlaying() throws RemoteException {
+        gameBoard.displayWhosPlaying();
+    }
+
     public int getWaitingPlayers() throws RemoteException {
         return remoteService.getNumberOfPendingPlayers();
     }
@@ -190,11 +195,10 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         this.lobby = lobby;
     }
 
-    public int getOrderOfPlay() {
+    public int getOrderOfPlay() throws RemoteException {
         return orderOfPlay;
     }
 
-    @Override
     public void setOrderOfPlay(int orderOfPlay) throws RemoteException {
         this.orderOfPlay = orderOfPlay;
     }
