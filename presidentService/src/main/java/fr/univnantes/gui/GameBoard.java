@@ -29,15 +29,22 @@ public class GameBoard {
     private JLabel turnPlayer4;
     private CardList cardList1;
     private List<PlayerInterface> opponents;
+    private String namePlayer2;
+    private String namePlayer3;
+    private String namePlayer4;
 
     public GameBoard(Player player) throws RemoteException {
         this.player = player;
         opponents = player.getOpponents();
 
         myName.setText(player.getUserName());
-        player2Name.setText(opponents.get(0).getUserName());
-        player3Name.setText(opponents.get(1).getUserName());
-        player4Name.setText(opponents.get(2).getUserName());
+        namePlayer2 = opponents.get(0).getUserName();
+        namePlayer3 = opponents.get(1).getUserName();
+        namePlayer4 = opponents.get(2).getUserName();
+
+        player2Name.setText(namePlayer2 + ", number of cards left : " + opponents.get(0).getHand().size());
+        player3Name.setText(namePlayer3 + ", number of cards left : " + opponents.get(1).getHand().size());
+        player4Name.setText(namePlayer4 + ", number of cards left : " + opponents.get(2).getHand().size());
 
         passButton.addActionListener(actionEvent -> {
             try {
@@ -133,6 +140,11 @@ public class GameBoard {
     public void displayWhosPlaying(){
 
         try {
+
+            player2Name.setText(namePlayer2 + ", number of cards left : " + opponents.get(0).getHand().size());
+            player3Name.setText(namePlayer3 + ", number of cards left : " + opponents.get(1).getHand().size());
+            player4Name.setText(namePlayer4 + ", number of cards left : " + opponents.get(2).getHand().size());
+
             cardList1.updateCards(player.getHand());
 
             if(player.isMyTurn()){
