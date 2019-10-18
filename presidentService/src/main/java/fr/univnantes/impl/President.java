@@ -80,6 +80,7 @@ public class President extends Game implements Runnable {
             Card playedCard = currentPlayer.playCard(lastCardOnBoard);
 
             if (!playedCard.equals(lastCardOnBoard)) { //The player played a card
+                System.out.println("OK PLAYED CARD");
                 this.board.add(playedCard); //Last Card is added at the end of the list
 
                 if (currentPlayer.getHand().isEmpty()) {
@@ -94,6 +95,7 @@ public class President extends Game implements Runnable {
                         (playedCard.getValue() == 15
                                 || squareFormed()
                                 || noPlayersRemaining(currentPlayer))) {
+                    System.out.println("OK WIN");
                     //The player plays a 2, or formed a square, or everyone passed his turn
                     cleanGame();
                     playerPlay(currentPlayer);//Play again if you have taken over

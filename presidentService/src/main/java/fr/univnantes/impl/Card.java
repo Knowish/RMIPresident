@@ -21,7 +21,7 @@ public class Card  implements Serializable, Comparable<Card> {
 
     @Override
     public String toString() {
-        return "Card " + name + ", value: "+ value;
+        return name;
     }
 
     @Override
