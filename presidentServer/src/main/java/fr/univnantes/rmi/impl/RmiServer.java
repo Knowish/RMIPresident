@@ -70,11 +70,11 @@ public class RmiServer extends Observable implements RmiService {
         for (int i = 0; i < NB_PLAYERS; ++i) {
             PlayerInterface currentPlayer = pendingPlayers.get(i);
 
-            for (int j=0; j< NB_PLAYERS ; ++j){
+            //for (int j=0; j< NB_PLAYERS ; ++j){
                 currentPlayer.addOpponent(pendingPlayers.get((i+1) % 4));
                 currentPlayer.addOpponent(pendingPlayers.get((i+2) % 4));
                 currentPlayer.addOpponent(pendingPlayers.get((i+3) % 4));
-            }
+            //}
 
             startingPlayers.add(currentPlayer);
 

@@ -1,9 +1,11 @@
 package fr.univnantes.gui;
 
+import fr.univnantes.impl.Card;
 import fr.univnantes.impl.Player;
 import fr.univnantes.rmi.inter.PlayerInterface;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -22,6 +24,7 @@ public class GameBoard {
     private JLabel myTurn;
     private JLabel turnPlayer2;
     private JLabel turnPlayer4;
+    private CardList cardList1;
     private List<PlayerInterface> opponents;
 
     public GameBoard(Player player) throws RemoteException {
@@ -37,6 +40,7 @@ public class GameBoard {
             try {
                 player.setMyTurn(false);
                 player.setPassTurn(false);
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -61,6 +65,8 @@ public class GameBoard {
     public void displayWhosPlaying(){
 
         try {
+            cardList1.updateCards(player.getHand());
+
             if(player.isMyTurn()){
 
                 myTurn.setText("My turn");
@@ -96,5 +102,4 @@ public class GameBoard {
         }
 
     }
-
 }
