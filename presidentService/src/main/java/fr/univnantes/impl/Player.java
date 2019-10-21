@@ -98,6 +98,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
 
         chosenCard = findCardWithName(cardName);
         hand.remove(chosenCard);
+        gameBoard.setTas(chosenCard);
 /*
         if(gameBoard.promptUserChoice()){
             String cardName = gameBoard.promptCardChoice(cardsICanPlay);
@@ -234,6 +235,12 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
 
     public void setGameBoard(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
+    }
+
+    public GameBoard getGameBoard(){return this.gameBoard;}
+
+    public void updateTas(Card card)throws RemoteException{
+        getGameBoard().setTas(card);
     }
 
     /**

@@ -34,4 +34,6 @@ public interface PlayerInterface extends Remote {
     boolean isMyTurn() throws RemoteException;
 
     void updateWhosPlaying() throws RemoteException;
+
+    void updateTas(Card card) throws RemoteException;
 }

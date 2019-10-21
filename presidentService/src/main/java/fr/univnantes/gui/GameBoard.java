@@ -28,6 +28,7 @@ public class GameBoard {
     private JLabel turnPlayer2;
     private JLabel turnPlayer4;
     private CardList cardList1;
+    private CardList tas;
     private List<PlayerInterface> opponents;
     private String namePlayer2;
     private String namePlayer3;
@@ -180,6 +181,13 @@ public class GameBoard {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void setTas(Card card) throws  RemoteException{
+        List<Card> listTas = new ArrayList<Card>();
+        listTas.add(card);
+        tas.updateCards(listTas);
 
     }
 }

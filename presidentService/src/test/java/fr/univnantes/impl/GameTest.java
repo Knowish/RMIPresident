@@ -26,9 +26,9 @@ public class GameTest {
     @Test
     void distributionTest() throws RemoteException {
         PlayerInterface player1 = new Player("Player1");
-        PlayerInterface player2 = new Player("Player1");
-        PlayerInterface player3 = new Player("Player1");
-        PlayerInterface player4 = new Player("Player1");
+        PlayerInterface player2 = new Player("Player2");
+        PlayerInterface player3 = new Player("Player3");
+        PlayerInterface player4 = new Player("Player4");
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.addPlayer(player3);

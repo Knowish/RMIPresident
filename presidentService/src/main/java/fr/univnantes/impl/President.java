@@ -82,6 +82,10 @@ public class President extends Game implements Runnable {
             if (!playedCard.equals(lastCardOnBoard)) { //The player played a card
                 System.out.println("OK PLAYED CARD");
                 this.board.add(playedCard); //Last Card is added at the end of the list
+                currentPlayer.updateTas(playedCard);
+                for(PlayerInterface p : players){
+                    p.updateTas(playedCard);
+                }
 
                 if (currentPlayer.getHand().isEmpty()) {
                     this.winOrder.add(currentPlayer);
@@ -127,8 +131,11 @@ public class President extends Game implements Runnable {
 
     public void cleanGame() throws RemoteException {
         this.board.clear();
+        Card CardOnBoard = new Card(0, "");
+        this.board.add(CardOnBoard);
         for (PlayerInterface p : this.players) {
             p.setPassTurn(false);
+            p.updateTas(CardOnBoard);
         }
     }
 
