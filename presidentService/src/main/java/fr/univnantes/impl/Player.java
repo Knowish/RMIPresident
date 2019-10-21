@@ -1,7 +1,7 @@
 package fr.univnantes.impl;
+
 import fr.univnantes.gui.GameBoard;
 import fr.univnantes.gui.Lobby;
-import fr.univnantes.impl.Card;
 import fr.univnantes.rmi.inter.PlayerInterface;
 import fr.univnantes.rmi.inter.RmiService;
 
@@ -13,9 +13,8 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class Player extends UnicastRemoteObject implements PropertyChangeListener, PlayerInterface {
 
@@ -257,6 +256,11 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
             }
         }
         return  playableCards;
+    }
+
+    @Override
+    public void sortHand() throws RemoteException {
+        Collections.sort(this.hand);
     }
 
 }

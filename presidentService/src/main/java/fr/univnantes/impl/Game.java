@@ -37,6 +37,9 @@ abstract class Game implements Serializable {
             this.players.get(i % this.players.size()).addToHand(this.board.get(i));
         }
         this.board.clear();
+        for (PlayerInterface p : this.players) {
+            p.sortHand();
+        }
     }
 
     public void generateCardPool() {
