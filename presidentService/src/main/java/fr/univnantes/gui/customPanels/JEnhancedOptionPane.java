@@ -16,7 +16,6 @@ public class JEnhancedOptionPane extends JOptionPane {
 
         pane.setWantsInput(true);
         pane.setSelectionValues(choices);
-        pane.setInitialSelectionValue(defaultOption);
         pane.setComponentOrientation((getRootFrame()).getComponentOrientation());
         pane.setMessageType(QUESTION_MESSAGE);
         pane.selectInitialValue();
@@ -24,6 +23,7 @@ public class JEnhancedOptionPane extends JOptionPane {
         dialog.setVisible(true);
         dialog.dispose();
         final Object value = pane.getInputValue();
-        return (value == UNINITIALIZED_VALUE) ? null : (String) value;
+        if (value == UNINITIALIZED_VALUE) return null;
+        else return (String) value;
     }
 }

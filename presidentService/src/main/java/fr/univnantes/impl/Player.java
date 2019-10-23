@@ -93,11 +93,13 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
 
         if(cardName==null){
             pass();
+        } else {
+            chosenCard = findCardWithName(cardName);
+            hand.remove(chosenCard);
+            gameBoard.setTas(chosenCard);
         }
 
-        chosenCard = findCardWithName(cardName);
-        hand.remove(chosenCard);
-        gameBoard.setTas(chosenCard);
+
 /*
         if(gameBoard.promptUserChoice()){
             String cardName = gameBoard.promptCardChoice(cardsICanPlay);

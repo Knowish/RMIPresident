@@ -121,21 +121,20 @@ public class GameBoard {
 
         Object[] possibilities = cardsName.toArray();
 
-        /*
-        String s = (String)JOptionPane.showInputDialog(
+
+        /*String res = JEnhancedOptionPane.showInputDialog("Choose one of the following or pass your turn :",
+                new Object[]{"Play", "Pass"},
+                possibilities,
+                possibilities[0],
+                "Choose a card");*/
+        return (String)JOptionPane.showInputDialog(
                 panel1,
                 "Choose one of the following or pass your turn :",
                 "Choose a card",
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 possibilities,
-                possibilities[0]); */
-
-        return JEnhancedOptionPane.showInputDialog("Choose one of the following or pass your turn :",
-                                                        new Object[]{"Play", "Pass"},
-                                                        possibilities,
-                                                        possibilities[0],
-                                                        "Choose a card");
+                possibilities[0]);
     }
 
     public void displayWhosPlaying(){
