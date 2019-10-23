@@ -65,7 +65,7 @@ public class President extends Game implements Runnable {
 
         Card lastCardOnBoard;
 
-        if (allPlayersPassTurn()) { //Just to fix a tricky case
+        if (noPlayersRemaining(currentPlayer)) { //Just to fix a tricky case
             cleanGame();
         }
 
@@ -91,15 +91,14 @@ public class President extends Game implements Runnable {
                     this.winOrder.add(currentPlayer);
                     cleanGame();
                     System.out.println("Le joueur " + currentPlayer.getUserName()
-                            + " a posé toutes ses cartes ! Il est le n°" + winOrder.indexOf(currentPlayer)
+                            + " a posé toutes ses cartes ! Il est le n°" + (winOrder.indexOf(currentPlayer)+1)
                             + " à terminer.");
                 }
-
                 if (!currentPlayer.getHand().isEmpty() &&
                         (playedCard.getValue() == 15
                                 || squareFormed()
                                 || noPlayersRemaining(currentPlayer))) {
-                    System.out.println("OK WIN");
+                    System.out.println("Le joueur " + currentPlayer.getUserName() + " prend la main.");
                     //The player plays a 2, or formed a square, or everyone passed his turn
                     cleanGame();
                     playerPlay(currentPlayer);//Play again if you have taken over
@@ -123,8 +122,9 @@ public class President extends Game implements Runnable {
     public boolean noPlayersRemaining(PlayerInterface lastPlayer) throws RemoteException {
         boolean survivor = true;
         for (PlayerInterface p : this.players) {
-            if (p != lastPlayer)
+            if (p != lastPlayer) {
                 survivor = survivor && (p.isPassTurn() || p.getHand().isEmpty());
+            }
         }
         return survivor;
     }
@@ -137,14 +137,6 @@ public class President extends Game implements Runnable {
             p.setPassTurn(false);
             p.updateTas(CardOnBoard);
         }
-    }
-
-    public boolean allPlayersPassTurn() throws RemoteException {
-        boolean gameBlocked = true;
-        for (PlayerInterface p : this.players) {
-            gameBlocked = gameBlocked && p.isPassTurn();
-        }
-        return gameBlocked;
     }
 
     @Override
