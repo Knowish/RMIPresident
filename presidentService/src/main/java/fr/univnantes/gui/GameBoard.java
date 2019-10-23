@@ -114,12 +114,14 @@ public class GameBoard {
 
     public String promptCardChoice(List<Card> cardsICanPlay) throws RemoteException {
 
-        List<String> cardsName = new ArrayList<>();
-        for (Card card : cardsICanPlay ){
-            cardsName.add(card.getName());
-        }
+        String result;
+        if(!cardsICanPlay.isEmpty()) {
+            List<String> cardsName = new ArrayList<>();
+            for (Card card : cardsICanPlay) {
+                cardsName.add(card.getName());
+            }
 
-        Object[] possibilities = cardsName.toArray();
+            Object[] possibilities = cardsName.toArray();
 
 
         /*String res = JEnhancedOptionPane.showInputDialog("Choose one of the following or pass your turn :",
@@ -127,14 +129,18 @@ public class GameBoard {
                 possibilities,
                 possibilities[0],
                 "Choose a card");*/
-        return (String)JOptionPane.showInputDialog(
-                panel1,
-                "Choose one of the following or pass your turn :",
-                "Choose a card",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                possibilities,
-                possibilities[0]);
+            result = (String) JOptionPane.showInputDialog(
+                    panel1,
+                    "Choose one of the following or pass your turn :",
+                    "Choose a card",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    possibilities,
+                    possibilities[0]);
+        } else {
+            result = JOptionPane.showInputDialog(panel1, "You can't play. :/");
+        }
+        return result;
     }
 
     public void displayWhosPlaying(){
