@@ -185,7 +185,7 @@ public class GameBoard {
     }
 
     public void setTrick(Card card) throws  RemoteException{
-        List<Card> listTas = new ArrayList<Card>();
+        List<Card> listTas = new ArrayList<>();
         listTas.add(card);
         trick.updateCards(listTas);
 
