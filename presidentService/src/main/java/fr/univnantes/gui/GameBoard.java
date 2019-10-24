@@ -1,15 +1,10 @@
 package fr.univnantes.gui;
 
 import fr.univnantes.impl.Card;
-import fr.univnantes.gui.customPanels.JEnhancedOptionPane;
-import fr.univnantes.impl.Card;
 import fr.univnantes.impl.Player;
 import fr.univnantes.rmi.inter.PlayerInterface;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +23,7 @@ public class GameBoard {
     private JLabel turnPlayer2;
     private JLabel turnPlayer4;
     private CardList cardList1;
-    private CardList tas;
+    private CardList trick;
     private List<PlayerInterface> opponents;
     private String namePlayer2;
     private String namePlayer3;
@@ -189,10 +184,10 @@ public class GameBoard {
 
     }
 
-    public void setTas(Card card) throws  RemoteException{
+    public void setTrick(Card card) throws  RemoteException{
         List<Card> listTas = new ArrayList<Card>();
         listTas.add(card);
-        tas.updateCards(listTas);
+        trick.updateCards(listTas);
 
     }
 }
