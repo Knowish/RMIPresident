@@ -65,28 +65,36 @@ public class President extends Game implements Runnable {
 
         Card lastCardOnBoard;
 
+        //si tout le monde a passé son tours
         if (noPlayersRemaining(currentPlayer)) { //Just to fix a tricky case
             cleanGame();
         }
 
+        //si le joueur n'a pas passé son tour auparavent et s'il a des cartes en main
         if (!currentPlayer.isPassTurn()
                 && !currentPlayer.getHand().isEmpty()) {
 
-            if (!this.board.isEmpty()) {
-                lastCardOnBoard = this.board.get(this.board.size() - 1);
-            } else {
+            //si aucune carte n'a encore été placé au milieu au place une carte de valeur 0
+            if (this.board.isEmpty()) {
                 lastCardOnBoard = new Card(0, "");
+            } else {
+                //sinon on actualise la valeur de la dernière carte à avoir été jouée
+                lastCardOnBoard = this.board.get(this.board.size() - 1);
             }
+            //le joueur joue une carte
             Card playedCard = currentPlayer.playCard(lastCardOnBoard);
 
-            if (!playedCard.equals(lastCardOnBoard)) { //The player played a card
-                System.out.println("OK PLAYED CARD");
+            //if the player played a card
+            if (!playedCard.equals(lastCardOnBoard)) {
                 this.board.add(playedCard); //Last Card is added at the end of the list
                 currentPlayer.updateTas(playedCard);
+
+                //on actualise la valeur du tas pour tout les joueurs
                 for(PlayerInterface p : players){
                     p.updateTas(playedCard);
                 }
 
+                //si le joueur à posé toute ses cartes, il a fini pour ce round
                 if (currentPlayer.getHand().isEmpty()) {
                     this.winOrder.add(currentPlayer);
                     cleanGame();
@@ -94,12 +102,12 @@ public class President extends Game implements Runnable {
                             + " a posé toutes ses cartes ! Il est le n°" + (winOrder.indexOf(currentPlayer)+1)
                             + " à terminer.");
                 }
+                //The player plays a 2, or formed a square, or everyone passed his turn
                 if (!currentPlayer.getHand().isEmpty() &&
                         (playedCard.getValue() == 15
                                 || squareFormed()
                                 || noPlayersRemaining(currentPlayer))) {
                     System.out.println("Le joueur " + currentPlayer.getUserName() + " prend la main.");
-                    //The player plays a 2, or formed a square, or everyone passed his turn
                     cleanGame();
                     playerPlay(currentPlayer);//Play again if you have taken over
                 }
