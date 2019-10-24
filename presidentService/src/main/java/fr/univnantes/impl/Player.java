@@ -1,6 +1,7 @@
 package fr.univnantes.impl;
 
 import fr.univnantes.gui.GameBoard;
+import fr.univnantes.gui.GuiBuilder;
 import fr.univnantes.gui.Lobby;
 import fr.univnantes.rmi.inter.PlayerInterface;
 import fr.univnantes.rmi.inter.RmiService;
@@ -15,8 +16,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Exchanger;
 
-public class Player extends UnicastRemoteObject implements PropertyChangeListener, PlayerInterface {
+public class Player extends UnicastRemoteObject implements PropertyChangeListener, PlayerInterface, Runnable {
 
 
     private String userName;
@@ -30,6 +32,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     private int orderOfPlay; //the number correspond to the place of the player around the table 0 -> 1 -> 2 -> 3
     private List<PlayerInterface> opponents;
     private GameBoard gameBoard;
+
 
 
     public Player(String userName) throws RemoteException {
@@ -125,6 +128,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     @Override
     public void addToHand(Card card) throws RemoteException {
         hand.add(card);
+        sortHand();
     }
 
     public void pass() throws RemoteException {
@@ -192,14 +196,6 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         setNumberOfPendingPlayers(waitingPlayers);
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener pcl) {
-        support.addPropertyChangeListener(pcl);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
-    }
-
     public boolean isMyTurn() throws RemoteException{
         return myTurn;
     }
@@ -265,4 +261,51 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         Collections.sort(this.hand);
     }
 
+    /**
+     *
+     * @param winOrder 1 if the player is the president, 4 if he is the trou du cul
+     * @throws RemoteException
+     */
+    @Override
+    public Card exchangeCard(int winOrder) throws RemoteException {
+        Card exchangedCard = null;
+        //si le joueur est le president, il donne sa pire carte
+        switch (winOrder){
+            case 1:
+
+                String cardName = gameBoard.promptCardChoice(hand);
+
+                while (cardName==null){
+                    cardName = gameBoard.promptCardChoice(hand);
+                }
+
+                exchangedCard = findCardWithName(cardName);
+
+                gameBoard.showUserExchangedCards(exchangedCard, 4);
+                break;
+            case 4 :
+                exchangedCard = hand.get(hand.size()-1);
+                gameBoard.showUserExchangedCards(exchangedCard, 1);
+                break;
+            default :
+                break;
+        }
+        return exchangedCard;
+
+    }
+
+    @Override
+    public void removeCardFromHand(Card cardToRemove) throws RemoteException {
+        hand.remove(cardToRemove);
+    }
+
+    @Override
+    public void run() {
+        GuiBuilder frame = new GuiBuilder(this);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
 }

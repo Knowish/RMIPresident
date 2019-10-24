@@ -6,6 +6,7 @@ import fr.univnantes.impl.Player;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.concurrent.Exchanger;
 
 public interface PlayerInterface extends Remote {
 
@@ -38,4 +39,8 @@ public interface PlayerInterface extends Remote {
     void updateTrick(Card card) throws RemoteException;
 
     void sortHand() throws RemoteException;
+
+    Card exchangeCard(int i) throws RemoteException;
+
+    void removeCardFromHand(Card cardToRemove) throws RemoteException;
 }

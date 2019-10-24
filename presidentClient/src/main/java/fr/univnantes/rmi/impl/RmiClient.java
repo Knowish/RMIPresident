@@ -33,13 +33,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient {
 
             RmiClient client = new RmiClient();
             Player myPlayer = new Player();
-            GuiBuilder frame = new GuiBuilder(myPlayer);
-
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-
+            myPlayer.run();
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -190,4 +190,23 @@ public class GameBoard {
         trick.updateCards(listTas);
 
     }
+
+    public void showUserExchangedCards(Card exchangedCard, int roleToExchangeTo) {
+        String labelOfTheRoleToExchangeTo="";
+        switch (roleToExchangeTo){
+            case 1:
+                labelOfTheRoleToExchangeTo = "président";
+                break;
+            case 2:
+                labelOfTheRoleToExchangeTo = "vice-président";
+                break;
+            case 3:
+                labelOfTheRoleToExchangeTo = "vice-trou du cul";
+                break;
+            case 4:
+                labelOfTheRoleToExchangeTo = "trou du cul";
+                break;
+        }
+        JOptionPane.showMessageDialog(panel1, "Vous allez échanger cette carte avec le "+labelOfTheRoleToExchangeTo+" : "+exchangedCard.getName());
+    }
 }
