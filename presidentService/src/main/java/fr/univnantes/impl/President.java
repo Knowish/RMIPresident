@@ -82,10 +82,7 @@ public class President extends Game implements Runnable {
             if (!playedCard.equals(lastCardOnBoard)) { //The player played a card
                 System.out.println("OK PLAYED CARD");
                 this.board.add(playedCard); //Last Card is added at the end of the list
-                currentPlayer.updateTas(playedCard);
-                for(PlayerInterface p : players){
-                    p.updateTas(playedCard);
-                }
+                updateAllTricks(playedCard);
 
                 if (currentPlayer.getHand().isEmpty()) {
                     this.winOrder.add(currentPlayer);
@@ -108,6 +105,12 @@ public class President extends Game implements Runnable {
 
         currentPlayer.setMyTurn(false);
 
+    }
+
+    private void updateAllTricks(Card playedCard) throws RemoteException {
+        for(PlayerInterface p : players){
+            p.updateTrick(playedCard);
+        }
     }
 
     public boolean squareFormed() {
@@ -135,7 +138,7 @@ public class President extends Game implements Runnable {
         this.board.add(CardOnBoard);
         for (PlayerInterface p : this.players) {
             p.setPassTurn(false);
-            p.updateTas(CardOnBoard);
+            p.updateTrick(CardOnBoard);
         }
     }
 

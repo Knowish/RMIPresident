@@ -96,7 +96,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         } else {
             chosenCard = findCardWithName(cardName);
             hand.remove(chosenCard);
-            gameBoard.setTas(chosenCard);
+            gameBoard.setTrick(chosenCard);
         }
 
 
@@ -240,8 +240,8 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
 
     public GameBoard getGameBoard(){return this.gameBoard;}
 
-    public void updateTas(Card card)throws RemoteException{
-        getGameBoard().setTas(card);
+    public void updateTrick(Card card)throws RemoteException{
+        getGameBoard().setTrick(card);
     }
 
     /**

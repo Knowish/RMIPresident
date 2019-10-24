@@ -35,7 +35,7 @@ public interface PlayerInterface extends Remote {
 
     void updateWhosPlaying() throws RemoteException;
 
-    void updateTas(Card card) throws RemoteException;
+    void updateTrick(Card card) throws RemoteException;
 
     void sortHand() throws RemoteException;
 }
