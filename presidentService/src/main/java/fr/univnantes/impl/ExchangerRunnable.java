@@ -48,6 +48,7 @@ public class ExchangerRunnable implements Runnable {
 
         player.removeCardFromHand(cardToExchange);
         player.addToHand(cardObtained);
+        player.updateHandView();
         System.out.println(
                 player.getUserName() +
                         " exchanged " + cardToExchange.getName() + " for " + cardObtained.getName()
