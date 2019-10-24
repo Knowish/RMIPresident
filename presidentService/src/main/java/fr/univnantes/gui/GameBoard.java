@@ -138,6 +138,10 @@ public class GameBoard {
         return result;
     }
 
+    public void updateCards(List<Card> cards) {
+        cardList1.updateCards(cards);
+    }
+
     public void displayWhosPlaying(){
 
         try {
@@ -146,7 +150,7 @@ public class GameBoard {
             player3Name.setText(namePlayer3 + ", number of cards left : " + opponents.get(1).getHand().size());
             player4Name.setText(namePlayer4 + ", number of cards left : " + opponents.get(2).getHand().size());
 
-            cardList1.updateCards(player.getHand());
+            //cardList1.updateCards(player.getHand());
 
             String imdead, p2dead, p3dead, p4dead;
 

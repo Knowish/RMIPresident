@@ -205,7 +205,13 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     }
 
     @Override
+    public void updateHandView() throws RemoteException {
+        gameBoard.updateCards(this.getHand());
+    }
+
+    @Override
     public void updateWhosPlaying() throws RemoteException {
+        updateHandView();
         gameBoard.displayWhosPlaying();
     }
 

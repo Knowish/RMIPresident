@@ -33,6 +33,8 @@ public interface PlayerInterface extends Remote {
 
     boolean isMyTurn() throws RemoteException;
 
+    void updateHandView() throws RemoteException;
+
     void updateWhosPlaying() throws RemoteException;
 
     void updateTrick(Card card) throws RemoteException;
