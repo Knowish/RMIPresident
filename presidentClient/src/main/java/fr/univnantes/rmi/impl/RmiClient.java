@@ -19,13 +19,13 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient {
         support = new PropertyChangeSupport(this);
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener pcl) {
-        support.addPropertyChangeListener(pcl);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
-    }
+//    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+//        support.addPropertyChangeListener(pcl);
+//    }
+//
+//    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+//        support.removePropertyChangeListener(pcl);
+//    }
 
     public static void main(String[] args) {
 
