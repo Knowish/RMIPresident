@@ -13,17 +13,14 @@ import static fr.univnantes.impl.ConstUtils.QUEEN;
 public class President extends Game implements Runnable {
 
     private List<PlayerInterface> winOrder = new ArrayList<>();
-    private boolean firstRound;
-    private boolean roundOver;
+    private boolean firstRound = true;
 
     public President() {
         super();
-        firstRound=true;
     }
 
     public President(List<PlayerInterface> players) {
         super(players);
-        firstRound=true;
         new Thread(this).start();
     }
 
@@ -35,25 +32,18 @@ public class President extends Game implements Runnable {
             System.out.println(this.board.toString());
             System.out.println("Le board doit être vide pour commencer : " + this.board.isEmpty());
 
-            while(!roundOver){
-                if(!firstRound){
-                    //at the begining of the second round and all the other ones, the president exchange two cards with the trou du cul
-                    //and the vice-president exchange one card with the vice-trou du cul
-                    exchangeCardsPhase(winOrder);
+            this.winOrder.clear();
+            while(!isDone()) {
+                PlayerInterface currentPlayer = this.players.get(i);
+                System.out.println(currentPlayer.getUserName());
+                currentPlayer.setMyTurn(true);
+                for(PlayerInterface player : players) {
+                    player.updateWhosPlaying();
                 }
-
-                while(!isDone() ) {
-                    PlayerInterface currentPlayer = this.players.get(i);
-                    System.out.println(currentPlayer.getUserName());
-                    currentPlayer.setMyTurn(true);
-                    for(PlayerInterface player : players){
-                        player.updateWhosPlaying();
-                    }
-                    playerPlay(currentPlayer);
-                    i = (i+1) % this.players.size();
-                }
-                firstRound = false;
+                playerPlay(currentPlayer);
+                i = (i+1) % this.players.size();
             }
+            firstRound = false;
         }
     }
 
@@ -78,20 +68,34 @@ public class President extends Game implements Runnable {
     @Override
     public boolean isDone() throws RemoteException {
         boolean result = true;
-        for (PlayerInterface p : this.players) {
-            if (!p.getHand().isEmpty())
-                result = false;
+        if (this.winOrder.size() == this.players.size()-1) {//if there is only one player left with cards, game ends
+                                                            // and this player is the loser
+            for (PlayerInterface p : this.players) {
+                if(!p.getHand().isEmpty()) {
+                    this.winOrder.add(p);
+                }
+            }
+        } else {
+            for (PlayerInterface p : this.players) {
+                if (!p.getHand().isEmpty())
+                    result = false;
+            }
         }
         return result;
     }
 
     public PlayerInterface identifyFirstPlayer() throws RemoteException {
-        Card queenOfHearts = new Card(12, QUEEN + " " + HEART);
         PlayerInterface hasTheHand = this.players.get(0);
 
-        for (PlayerInterface p : this.players) {
-            if (p.getHand().contains(queenOfHearts))
-                hasTheHand = p;
+        if (firstRound) {//for the first round, the first player is the one who got the Queen of Hearts
+            Card queenOfHearts = new Card(12, QUEEN + " " + HEART);
+
+            for (PlayerInterface p : this.players) {
+                if (p.getHand().contains(queenOfHearts))
+                    hasTheHand = p;
+            }
+        } else {  //the rest of the time, the loser starts
+            hasTheHand = winOrder.get(winOrder.size()-1);
         }
         return hasTheHand;
     }
@@ -131,11 +135,6 @@ public class President extends Game implements Runnable {
                     System.out.println("Le joueur " + currentPlayer.getUserName()
                             + " a posé toutes ses cartes ! Il est le n°" + (winOrder.indexOf(currentPlayer)+1)
                             + " à terminer.");
-
-                    //si tout le monde à la main vide sauf un
-                    if(winOrder.size()==3){
-                        roundOver=true;
-                    }
                 }
                 //The player plays a 2, or formed a square, or everyone passed his turn
                 else if (!currentPlayer.getHand().isEmpty() &&
@@ -192,7 +191,11 @@ public class President extends Game implements Runnable {
         gameOver = false;
         generateCardPool();
         distribution();
-        roundOver = false;
+        if(!firstRound){
+            //at the begining of the second round and all the other ones, the president exchange two cards with the trou du cul
+            //and the vice-president exchange one card with the vice-trou du cul
+            exchangeCardsPhase(winOrder);
+        }
     }
 
     @Override
