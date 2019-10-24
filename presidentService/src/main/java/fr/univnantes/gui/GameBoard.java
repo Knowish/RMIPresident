@@ -109,7 +109,7 @@ public class GameBoard {
 
     public String promptCardChoice(List<Card> cardsICanPlay) throws RemoteException {
 
-        String result;
+        String result = "";
         if(!cardsICanPlay.isEmpty()) {
             List<String> cardsName = new ArrayList<>();
             for (Card card : cardsICanPlay) {
@@ -133,7 +133,7 @@ public class GameBoard {
                     possibilities,
                     possibilities[0]);
         } else {
-            result = JOptionPane.showInputDialog(panel1, "You can't play. :/");
+            JOptionPane.showMessageDialog(panel1, "You can't play. :/");
         }
         return result;
     }
@@ -148,36 +148,45 @@ public class GameBoard {
 
             cardList1.updateCards(player.getHand());
 
+            String imdead, p2dead, p3dead, p4dead;
+
+            imdead = player.isPassTurn() ? "DEAD" : "";
+            p2dead = opponents.get(0).isPassTurn() ? "DEAD" : "";
+            p3dead = opponents.get(1).isPassTurn() ? "DEAD" : "";
+            p4dead = opponents.get(2).isPassTurn() ? "DEAD" : "";
+
             if(player.isMyTurn()){
 
                 myTurn.setText("My turn");
-                turnPlayer2.setText("");
-                turnPlayer3.setText("");
-                turnPlayer4.setText("");
+                turnPlayer2.setText(p2dead);
+                turnPlayer3.setText(p3dead);
+                turnPlayer4.setText(p4dead);
 
             } else if (opponents.get(0).isMyTurn()){
 
-                myTurn.setText("");
+                myTurn.setText(imdead);
                 turnPlayer2.setText("His turn");
-                turnPlayer3.setText("");
-                turnPlayer4.setText("");
+                turnPlayer3.setText(p3dead);
+                turnPlayer4.setText(p4dead);
 
             } else if (opponents.get(1).isMyTurn()){
 
 
-                myTurn.setText("");
-                turnPlayer2.setText("");
+                myTurn.setText(imdead);
+                turnPlayer2.setText(p2dead);
                 turnPlayer3.setText("His turn");
-                turnPlayer4.setText("");
+                turnPlayer4.setText(p4dead);
 
             } else if (opponents.get(2).isMyTurn()) { //TODO:Cette ligne est que pour les tests, faudra l'enlever
 
-                myTurn.setText("");
-                turnPlayer2.setText("");
-                turnPlayer3.setText("");
+                myTurn.setText(imdead);
+                turnPlayer2.setText(p2dead);
+                turnPlayer3.setText(p3dead);
                 turnPlayer4.setText("His turn");
 
             }
+
+
         } catch (RemoteException e) {
             e.printStackTrace();
         }
