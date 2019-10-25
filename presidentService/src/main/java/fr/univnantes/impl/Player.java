@@ -290,14 +290,14 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
 
                 exchangedCard = chooseOneCardToExchange();
 
-                gameBoard.showUserExchangedCards(exchangedCard, 4);
+                gameBoard.showUserExchangedCards(exchangedCard, 3);
                 break;
 
                 //si le joueur est le vice trou, il doit donner sa meilleur carte au vice pres
             case 3:
 
                 exchangedCard = getBestCard();
-                gameBoard.showUserExchangedCards(exchangedCard, 1);
+                gameBoard.showUserExchangedCards(exchangedCard, 2);
                 break;
 
                 //si le joueur est le trou il doit donner sa meilleur carte au pres

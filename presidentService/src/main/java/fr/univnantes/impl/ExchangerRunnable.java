@@ -1,6 +1,5 @@
 package fr.univnantes.impl;
 
-import fr.univnantes.impl.Card;
 import fr.univnantes.rmi.inter.PlayerInterface;
 
 import java.rmi.RemoteException;
@@ -19,11 +18,6 @@ public class ExchangerRunnable implements Runnable {
 
     @Override
     public void run() {
-        try {
-            System.out.println(this.player.getUserName()+"Je commence mon échange");
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
         try {
             switch (winOrder){
                 case 1 :
@@ -50,11 +44,6 @@ public class ExchangerRunnable implements Runnable {
                     break;
             }
         } catch (RemoteException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println(this.player.getUserName()+ "J'ai fini mon échange");
-        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }

@@ -204,7 +204,7 @@ public class GameBoard {
 
     }
 
-    public void showUserExchangedCards(Card exchangedCard, int roleToExchangeTo) {
+    private String getLabelCorrespondingToRole(int roleToExchangeTo){
         String labelOfTheRoleToExchangeTo="";
         switch (roleToExchangeTo){
             case 1:
@@ -220,6 +220,11 @@ public class GameBoard {
                 labelOfTheRoleToExchangeTo = "trou du cul";
                 break;
         }
+        return labelOfTheRoleToExchangeTo;
+    }
+
+    public void showUserExchangedCards(Card exchangedCard, int roleToExchangeTo) {
+        String labelOfTheRoleToExchangeTo = getLabelCorrespondingToRole(roleToExchangeTo);
         JOptionPane.showMessageDialog(panel1, "Vous allez échanger cette carte avec le "+labelOfTheRoleToExchangeTo+" : "+exchangedCard.getName());
     }
 }
