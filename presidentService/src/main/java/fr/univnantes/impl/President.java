@@ -38,7 +38,6 @@ public class President extends Game implements Runnable {
             this.winOrder.clear();
             while(!roundIsDone()) {
                 PlayerInterface currentPlayer = this.players.get(i);
-                System.out.println(currentPlayer.getUserName());
                 currentPlayer.setMyTurn(true);
                 for(PlayerInterface player : players) {
                     player.updateWhosPlaying();
@@ -76,13 +75,16 @@ public class President extends Game implements Runnable {
                 new ExchangerRunnable(exchangerVices, winOrder.get(winOrder.size()-2), 3 );
         listOfThreads.add(exchangerRunnableViceTrou);
 
-        ExecutorService es = Executors.newCachedThreadPool();
+        ExecutorService es = Executors.newFixedThreadPool(4);
 
         for (int i=0; i<4; ++i){
             es.execute(listOfThreads.get(i));
         }
+        System.out.println("J'ai fini de lancer tout les threads");
         es.shutdown();
-        boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
+        System.out.println("J'ai shutdown les threads");
+        es.awaitTermination(10, TimeUnit.MINUTES);
+        System.out.println("AwaitTermination a fini");
 
         /*
         new Thread(exchangerRunnablePresident).start();

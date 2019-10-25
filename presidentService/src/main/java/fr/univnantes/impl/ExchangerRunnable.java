@@ -20,6 +20,11 @@ public class ExchangerRunnable implements Runnable {
     @Override
     public void run() {
         try {
+            System.out.println(this.player.getUserName()+"Je commence mon échange");
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        try {
             switch (winOrder){
                 case 1 :
                     for (int i=0; i<2; ++i){
@@ -39,13 +44,19 @@ public class ExchangerRunnable implements Runnable {
                     for (int i=0; i<2; ++i){
                         exchange();
                     }
+                    break;
+
                 default:
-                    exchange();
+                    break;
             }
         } catch (RemoteException | InterruptedException e) {
             e.printStackTrace();
         }
-
+        try {
+            System.out.println(this.player.getUserName()+ "J'ai fini mon échange");
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     private void exchange() throws RemoteException, InterruptedException {
