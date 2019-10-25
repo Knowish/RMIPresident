@@ -107,7 +107,7 @@ public class GameBoard {
         return res;
     }
 
-    public String promptCardChoice(List<Card> cardsICanPlay) throws RemoteException {
+    public String promptCardChoice(List<Card> cardsICanPlay, String windowTitle) throws RemoteException {
 
         String result = "";
         if(!cardsICanPlay.isEmpty()) {
@@ -126,7 +126,7 @@ public class GameBoard {
                 "Choose a card");*/
             result = (String) JOptionPane.showInputDialog(
                     panel1,
-                    "Choose one of the following or pass your turn :",
+                    windowTitle,
                     "Choose a card",
                     JOptionPane.PLAIN_MESSAGE,
                     null,

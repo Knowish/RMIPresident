@@ -6,6 +6,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Exchanger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static fr.univnantes.impl.ConstUtils.HEART;
 import static fr.univnantes.impl.ConstUtils.QUEEN;
@@ -33,7 +36,7 @@ public class President extends Game implements Runnable {
             System.out.println("Le board doit être vide pour commencer : " + this.board.isEmpty());
 
             this.winOrder.clear();
-            while(!isDone()) {
+            while(!roundIsDone()) {
                 PlayerInterface currentPlayer = this.players.get(i);
                 System.out.println(currentPlayer.getUserName());
                 currentPlayer.setMyTurn(true);
@@ -48,25 +51,49 @@ public class President extends Game implements Runnable {
     }
 
     //Defini la phase d'échange de cartes entre les joueurs
-    private void exchangeCardsPhase(List<PlayerInterface> winOrder) throws RemoteException {
+    private void exchangeCardsPhase(List<PlayerInterface> winOrder) throws RemoteException, InterruptedException {
 
         //le president doit donner ses deux cartes les moins fortes au trou du cul
         //le trou du cul doit donner ses deux cartes les moins fortes au president;
-        Exchanger exchanger = new Exchanger();
+        Exchanger<Card> exchangerPresidentTrouduc = new Exchanger<>();
+        Exchanger<Card> exchangerVices = new Exchanger<>();
+
+        List<ExchangerRunnable> listOfThreads = new ArrayList<>();
 
         ExchangerRunnable exchangerRunnablePresident =
-                new ExchangerRunnable(exchanger, winOrder.get(0), 1);
+                new ExchangerRunnable(exchangerPresidentTrouduc, winOrder.get(0), 1);
+        listOfThreads.add(exchangerRunnablePresident);
 
         ExchangerRunnable exchangerRunnableTrouduc =
-                new ExchangerRunnable(exchanger, winOrder.get(winOrder.size()-1), 4 );
+                new ExchangerRunnable(exchangerPresidentTrouduc, winOrder.get(winOrder.size()-1), 4 );
+        listOfThreads.add(exchangerRunnableTrouduc);
 
+        ExchangerRunnable exchangerRunnableVicePres =
+                new ExchangerRunnable(exchangerVices, winOrder.get(1), 2 );
+        listOfThreads.add(exchangerRunnableVicePres);
+
+        ExchangerRunnable exchangerRunnableViceTrou =
+                new ExchangerRunnable(exchangerVices, winOrder.get(winOrder.size()-2), 3 );
+        listOfThreads.add(exchangerRunnableViceTrou);
+
+        ExecutorService es = Executors.newCachedThreadPool();
+
+        for (int i=0; i<4; ++i){
+            es.execute(listOfThreads.get(i));
+        }
+        es.shutdown();
+        boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
+
+        /*
         new Thread(exchangerRunnablePresident).start();
         new Thread(exchangerRunnableTrouduc).start();
+        new Thread(exchangerRunnableVicePres).start();
+        new Thread(exchangerRunnableViceTrou).start();*/
 
     }
 
     @Override
-    public boolean isDone() throws RemoteException {
+    public boolean roundIsDone() throws RemoteException {
         boolean result = true;
         if (this.winOrder.size() == this.players.size()-1) {//if there is only one player left with cards, game ends
                                                             // and this player is the loser
@@ -187,7 +214,7 @@ public class President extends Game implements Runnable {
         }
     }
 
-    public final void initializeGame() throws RemoteException {
+    public final void initializeGame() throws RemoteException, InterruptedException {
         gameOver = false;
         generateCardPool();
         distribution();

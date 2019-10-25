@@ -15,7 +15,7 @@ abstract class Game implements Serializable {
     protected boolean gameOver;
 
     abstract void playGame() throws RemoteException, InterruptedException;
-    abstract boolean isDone() throws RemoteException;
+    abstract boolean roundIsDone() throws RemoteException;
     abstract PlayerInterface identifyFirstPlayer() throws RemoteException;
 
     public Game(){}

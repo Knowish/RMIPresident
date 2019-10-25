@@ -92,7 +92,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         Card chosenCard = lastCard;
         List<Card> cardsICanPlay = this.cardsICanPlay(chosenCard);
 
-        String cardName = gameBoard.promptCardChoice(cardsICanPlay);
+        String cardName = gameBoard.promptCardChoice(cardsICanPlay, "Choose one of the following or pass your turn :");
 
         if(cardName==null || cardsICanPlay.isEmpty()){
             pass();
@@ -275,29 +275,56 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     @Override
     public Card exchangeCard(int winOrder) throws RemoteException {
         Card exchangedCard = null;
-        //si le joueur est le president, il donne sa pire carte
+
         switch (winOrder){
+            //si le joueur est le president, il choisit la carte qu'il souhaite donner au trou du cul
             case 1:
 
-                String cardName = gameBoard.promptCardChoice(hand);
-
-                while (cardName==null){
-                    cardName = gameBoard.promptCardChoice(hand);
-                }
-
-                exchangedCard = findCardWithName(cardName);
+                exchangedCard = chooseOneCardToExchange();
 
                 gameBoard.showUserExchangedCards(exchangedCard, 4);
                 break;
-            case 4 :
-                exchangedCard = hand.get(hand.size()-1);
+
+                // si le joueur est le vicePresident il peut choisir la carte qu'il donne au vice trou
+            case 2:
+
+                exchangedCard = chooseOneCardToExchange();
+
+                gameBoard.showUserExchangedCards(exchangedCard, 4);
+                break;
+
+                //si le joueur est le vice trou, il doit donner sa meilleur carte au vice pres
+            case 3:
+
+                exchangedCard = getBestCard();
                 gameBoard.showUserExchangedCards(exchangedCard, 1);
                 break;
+
+                //si le joueur est le trou il doit donner sa meilleur carte au pres
+            case 4 :
+                exchangedCard = getBestCard();
+                gameBoard.showUserExchangedCards(exchangedCard, 1);
+                break;
+
             default :
                 break;
         }
         return exchangedCard;
 
+    }
+
+    private Card chooseOneCardToExchange() throws RemoteException {
+        String cardName = gameBoard.promptCardChoice(hand, "Choose one of your cards to exchange");
+
+        while (cardName==null){
+            cardName = gameBoard.promptCardChoice(hand, "Choose one of your cards to exchange");
+        }
+
+        return findCardWithName(cardName);
+    }
+
+    private Card getBestCard() throws RemoteException {
+        return  hand.get(hand.size()-1);
     }
 
     @Override

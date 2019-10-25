@@ -7,10 +7,9 @@ import java.rmi.RemoteException;
 import java.util.concurrent.Exchanger;
 
 public class ExchangerRunnable implements Runnable {
-    private Exchanger<Card> exchanger = null;
-    private PlayerInterface player    = null;
+    private Exchanger<Card> exchanger;
+    private PlayerInterface player;
     private int winOrder;
-    private Card cardObtained;
 
     public ExchangerRunnable(Exchanger<Card> exchanger, PlayerInterface player, int winOrder) {
         this.exchanger = exchanger;
@@ -26,6 +25,14 @@ public class ExchangerRunnable implements Runnable {
                     for (int i=0; i<2; ++i){
                         exchange();
                     }
+                    break;
+
+                case 2:
+                    exchange();
+                    break;
+
+                case 3:
+                    exchange();
                     break;
 
                 case 4 :
@@ -44,7 +51,7 @@ public class ExchangerRunnable implements Runnable {
     private void exchange() throws RemoteException, InterruptedException {
         Card cardToExchange = player.exchangeCard(winOrder);
 
-        this.cardObtained = this.exchanger.exchange(cardToExchange);
+        Card cardObtained = this.exchanger.exchange(cardToExchange);
 
         player.removeCardFromHand(cardToExchange);
         player.addToHand(cardObtained);
