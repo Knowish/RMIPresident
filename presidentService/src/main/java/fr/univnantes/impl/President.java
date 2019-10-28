@@ -1,6 +1,6 @@
 package fr.univnantes.impl;
 
-import fr.univnantes.rmi.inter.PlayerInterface;
+import fr.univnantes.inter.PlayerInterface;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ public class President extends Game implements Runnable {
 
     private List<PlayerInterface> winOrder = new ArrayList<>();
     private boolean firstRound = true;
+    private int nbOfPlayers;
 
     public President() {
         super();
@@ -24,6 +25,7 @@ public class President extends Game implements Runnable {
 
     public President(List<PlayerInterface> players) {
         super(players);
+        nbOfPlayers = this.players.size();
         new Thread(this).start();
     }
 
@@ -43,9 +45,15 @@ public class President extends Game implements Runnable {
                     player.updateWhosPlaying();
                 }
                 playerPlay(currentPlayer);
-                i = (i+1) % this.players.size();
+                i = (i+1) % nbOfPlayers;
             }
             firstRound = false;
+
+            KeepPlaying keepPlaying = new KeepPlaying(winOrder);
+
+            if(!keepPlaying.continuePlaying()){
+                gameOver = true;
+            }
         }
     }
 
@@ -80,24 +88,15 @@ public class President extends Game implements Runnable {
         for (int i=0; i<4; ++i){
             es.execute(listOfThreads.get(i));
         }
-        System.out.println("J'ai fini de lancer tout les threads");
         es.shutdown();
-        System.out.println("J'ai shutdown les threads");
-        es.awaitTermination(10, TimeUnit.MINUTES);
-        System.out.println("AwaitTermination a fini");
-
-        /*
-        new Thread(exchangerRunnablePresident).start();
-        new Thread(exchangerRunnableTrouduc).start();
-        new Thread(exchangerRunnableVicePres).start();
-        new Thread(exchangerRunnableViceTrou).start();*/
+        es.awaitTermination(2, TimeUnit.MINUTES);
 
     }
 
     @Override
     public boolean roundIsDone() throws RemoteException {
         boolean result = true;
-        if (this.winOrder.size() == this.players.size()-1) {//if there is only one player left with cards, game ends
+        if (this.winOrder.size() == nbOfPlayers-1) {//if there is only one player left with cards, game ends
                                                             // and this player is the loser
             for (PlayerInterface p : this.players) {
                 if(!p.getHand().isEmpty()) {

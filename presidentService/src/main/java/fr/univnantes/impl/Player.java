@@ -3,8 +3,8 @@ package fr.univnantes.impl;
 import fr.univnantes.gui.GameBoard;
 import fr.univnantes.gui.GuiBuilder;
 import fr.univnantes.gui.Lobby;
-import fr.univnantes.rmi.inter.PlayerInterface;
-import fr.univnantes.rmi.inter.RmiService;
+import fr.univnantes.inter.PlayerInterface;
+import fr.univnantes.inter.RmiService;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
@@ -16,7 +16,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Exchanger;
 
 public class Player extends UnicastRemoteObject implements PropertyChangeListener, PlayerInterface, Runnable {
 
@@ -330,6 +329,11 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     @Override
     public void removeCardFromHand(Card cardToRemove) throws RemoteException {
         hand.remove(cardToRemove);
+    }
+
+    @Override
+    public boolean askKeepPlaying(int rank) throws RemoteException {
+        return gameBoard.askKeepPlaying(rank);
     }
 
     @Override

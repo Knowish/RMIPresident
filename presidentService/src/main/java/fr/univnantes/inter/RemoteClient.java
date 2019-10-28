@@ -1,4 +1,4 @@
-package fr.univnantes.rmi.inter;
+package fr.univnantes.inter;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

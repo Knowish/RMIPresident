@@ -1,10 +1,7 @@
 package fr.univnantes.rmi.impl;
-import fr.univnantes.gui.GuiBuilder;
 import fr.univnantes.impl.Player;
-import fr.univnantes.rmi.inter.RemoteClient;
+import fr.univnantes.inter.RemoteClient;
 
-import javax.swing.*;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

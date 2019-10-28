@@ -2,7 +2,7 @@ package fr.univnantes.gui;
 
 import fr.univnantes.impl.Card;
 import fr.univnantes.impl.Player;
-import fr.univnantes.rmi.inter.PlayerInterface;
+import fr.univnantes.inter.PlayerInterface;
 
 import javax.swing.*;
 import java.rmi.RemoteException;
@@ -204,9 +204,9 @@ public class GameBoard {
 
     }
 
-    private String getLabelCorrespondingToRole(int roleToExchangeTo){
+    private String getLabelCorrespondingToRole(int rank){
         String labelOfTheRoleToExchangeTo="";
-        switch (roleToExchangeTo){
+        switch (rank){
             case 1:
                 labelOfTheRoleToExchangeTo = "président";
                 break;
@@ -219,6 +219,8 @@ public class GameBoard {
             case 4:
                 labelOfTheRoleToExchangeTo = "trou du cul";
                 break;
+            default:
+                break;
         }
         return labelOfTheRoleToExchangeTo;
     }
@@ -226,5 +228,12 @@ public class GameBoard {
     public void showUserExchangedCards(Card exchangedCard, int roleToExchangeTo) {
         String labelOfTheRoleToExchangeTo = getLabelCorrespondingToRole(roleToExchangeTo);
         JOptionPane.showMessageDialog(panel1, "Vous allez échanger cette carte avec le "+labelOfTheRoleToExchangeTo+" : "+exchangedCard.getName());
+    }
+
+    public boolean askKeepPlaying(int rank) {
+        String rankTitle = getLabelCorrespondingToRole(rank);
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog (null, "Round Over! You are "+rankTitle+". Would You Like to keep playing?","Keep Playing?",dialogButton);
+        return dialogResult == JOptionPane.YES_OPTION;
     }
 }

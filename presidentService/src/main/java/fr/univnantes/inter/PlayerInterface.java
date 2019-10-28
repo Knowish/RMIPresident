@@ -1,12 +1,10 @@
-package fr.univnantes.rmi.inter;
+package fr.univnantes.inter;
 
 import fr.univnantes.impl.Card;
-import fr.univnantes.impl.Player;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.concurrent.Exchanger;
 
 public interface PlayerInterface extends Remote {
 
@@ -45,4 +43,6 @@ public interface PlayerInterface extends Remote {
     Card exchangeCard(int i) throws RemoteException;
 
     void removeCardFromHand(Card cardToRemove) throws RemoteException;
+
+    boolean askKeepPlaying(int rank) throws RemoteException;
 }

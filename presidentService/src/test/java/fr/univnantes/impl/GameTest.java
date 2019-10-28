@@ -1,6 +1,6 @@
 package fr.univnantes.impl;
 
-import fr.univnantes.rmi.inter.PlayerInterface;
+import fr.univnantes.inter.PlayerInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

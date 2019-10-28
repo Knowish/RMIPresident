@@ -1,6 +1,6 @@
 package fr.univnantes.impl;
 
-import fr.univnantes.rmi.inter.PlayerInterface;
+import fr.univnantes.inter.PlayerInterface;
 
 import java.rmi.RemoteException;
 import java.util.concurrent.Exchanger;

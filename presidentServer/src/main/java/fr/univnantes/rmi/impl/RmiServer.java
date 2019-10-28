@@ -1,7 +1,7 @@
 package fr.univnantes.rmi.impl;
 import fr.univnantes.impl.President;
-import fr.univnantes.rmi.inter.PlayerInterface;
-import fr.univnantes.rmi.inter.RmiService;
+import fr.univnantes.inter.PlayerInterface;
+import fr.univnantes.inter.RmiService;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
