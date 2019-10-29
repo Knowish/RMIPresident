@@ -28,7 +28,7 @@ public class Lobby /*implements PropertyChangeListener*/ {
         usernameDisplayed.setText(player.getUserName());
         lobby.setBorder(border);
         // Pour retirer l'action de "Entrée" une fois le lobby passé (reste pour le choix de cartes)
-        ((JFrame)this.cards.getParent().getParent().getParent().getParent()).getRootPane().setDefaultButton(null);
+        ((JRootPane)this.cards.getParent().getParent().getParent()).setDefaultButton(null);
 
         //((JFrame)this.cards.getParent()).getRootPane().setDefaultButton(null);
         //client.addPropertyChangeListener(this);
