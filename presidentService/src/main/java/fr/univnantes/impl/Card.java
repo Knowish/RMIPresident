@@ -6,6 +6,11 @@ public class Card  implements Serializable, Comparable<Card> {
     private int value;
     private String name;
 
+    public Card() {
+        this.value = 0;
+        this.name = "";
+    }
+
     public Card(int value, String name) {
         this.value = value;
         this.name = name;

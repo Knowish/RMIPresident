@@ -140,13 +140,12 @@ public class President extends Game implements Runnable {
             cleanGame();
         }
 
-        //si le joueur n'a pas passé son tour auparavent et s'il a des cartes en main
-        if (!currentPlayer.isPassTurn()
-                && !currentPlayer.getHand().isEmpty()) {
+        //si le joueur n'a pas passé son tour auparavant et s'il a des cartes en main
+        if (canPlay(currentPlayer)) {
 
             //si aucune carte n'a encore été placé au milieu au place une carte de valeur 0
             if (this.board.isEmpty()) {
-                lastCardOnBoard = new Card(0, "");
+                lastCardOnBoard = new Card();
             } else {
                 //sinon on actualise la valeur de la dernière carte à avoir été jouée
                 lastCardOnBoard = this.board.get(this.board.size() - 1);
@@ -156,31 +155,40 @@ public class President extends Game implements Runnable {
 
             //if the player played a card
             if (!playedCard.equals(lastCardOnBoard)) {
-                this.board.add(playedCard); //Last Card is added at the end of the list
-                updateAllTricks(playedCard);
-
-                //si le joueur à posé toute ses cartes, il a fini pour ce round
-                if (currentPlayer.getHand().isEmpty()) {
-                    this.winOrder.add(currentPlayer);
-                    cleanGame();
-                    System.out.println("Le joueur " + currentPlayer.getUserName()
-                            + " a posé toutes ses cartes ! Il est le n°" + (winOrder.indexOf(currentPlayer)+1)
-                            + " à terminer.");
-                }
-                //The player plays a 2, or formed a square, or everyone passed his turn
-                else if (!currentPlayer.getHand().isEmpty() &&
-                        (playedCard.getValue() == 15
-                                || squareFormed()
-                                || noPlayersRemaining(currentPlayer))) {
-                    System.out.println("Le joueur " + currentPlayer.getUserName() + " prend la main.");
-                    cleanGame();
-                    playerPlay(currentPlayer);//Play again if you have taken over
-                }
+                cardHasBeenPlayed(currentPlayer, playedCard);
             }
         }
 
         currentPlayer.setMyTurn(false);
 
+    }
+
+    private void cardHasBeenPlayed(PlayerInterface currentPlayer, Card playedCard) throws RemoteException, InterruptedException {
+        this.board.add(playedCard); //Last Card is added at the end of the list
+        updateAllTricks(playedCard);
+
+        //si le joueur à posé toute ses cartes, il a fini pour ce round
+        if (currentPlayer.getHand().isEmpty()) {
+            this.winOrder.add(currentPlayer);
+            cleanGame();
+            System.out.println("Le joueur " + currentPlayer.getUserName()
+                    + " a posé toutes ses cartes ! Il est le n°" + (winOrder.indexOf(currentPlayer)+1)
+                    + " à terminer.");
+        }
+        //The player plays a 2, or formed a square, or everyone passed his turn
+        else if (!currentPlayer.getHand().isEmpty() &&
+                (playedCard.getValue() == 15
+                        || squareFormed()
+                        || noPlayersRemaining(currentPlayer))) {
+            System.out.println("Le joueur " + currentPlayer.getUserName() + " prend la main.");
+            cleanGame();
+            playerPlay(currentPlayer);//Play again if you have taken over
+        }
+    }
+
+    private boolean canPlay(PlayerInterface currentPlayer) throws RemoteException {
+        return !currentPlayer.isPassTurn()
+                && !currentPlayer.getHand().isEmpty();
     }
 
     private void updateAllTricks(Card playedCard) throws RemoteException {
@@ -210,7 +218,7 @@ public class President extends Game implements Runnable {
 
     public void cleanGame() throws RemoteException {
         this.board.clear();
-        Card CardOnBoard = new Card(0, "");
+        Card CardOnBoard = new Card();
         this.board.add(CardOnBoard);
         for (PlayerInterface p : this.players) {
             p.setPassTurn(false);
