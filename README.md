@@ -14,11 +14,11 @@ La connexion sera appelée une fois que le client aura entré un nom et cliqué 
 
 # III. Jouer la partie
 
-*Les règles sont celles du jeu du Président : valeurs des cartes (3, 4, 5, 6, 7, 8, 9, 10, Valet, Dame, Roi, As, 2), le tas se ferme lorsque les quatres cartes d'une même valeur sont possées successivement, le tas se ferme lorsqu'un 2 est posé. Le joueur qui ferme le tas garde la main. Le but est de vider sa main : le premier joueur à le faire est nommé Président, le second Vice-Président, le troisième est Vice-Trou-du-cul et le joueur restant est le Trou-du-cul.*
+*Les règles sont celles du jeu du Président : valeurs des cartes (3, 4, 5, 6, 7, 8, 9, 10, Valet, Dame, Roi, As, 2), le tas se ferme lorsque les quatres cartes d'une même valeur sont posées successivement, ou lorsqu'un 2 est posé. Le joueur qui ferme le tas garde la main. Le but est de vider sa main : le premier joueur à le faire est nommé Président, le second est Vice-Président, le troisième est Vice-Trou-du-cul et le joueur restant est le Trou-du-cul.*
 
 1. Démarrage de la partie
 
-Une fois les quarte joueurs réunis (il est possible de démarrer quatre instances de **`RmiClient`** sur une même machine), la vue changera et le joueur qui possède la Dame de coeur sera invité à jouer.
+Une fois les quatre joueurs réunis (il est possible de démarrer quatre instances de **`RmiClient`** sur une même machine), la vue changera et le joueur qui possède la Dame de coeur sera invité à jouer.
 
 2. Déroulement du tour
 
@@ -26,4 +26,4 @@ Il doit pour cela sélectionner la carte qu'il désire placer dans la liste dér
 
 # IV. Fin de la partie
 
-Lorsque les trois premiers joueurs ont réussi à vider leurs mains, la partie s'arrête et chaque joueur a une fenêtre lui indiquant son résultat et demande s'il désire rejouer. Si les quatres joueurs rejouent, une nouvelle partie se lance. Le président donnera deux cartes de son choix au trou-du-cul, le vice-président une au vice-trou-du-cul, ce dernier verra sa meilleure carte donnée au vice-président et les deux meilleures cartes du trou-du-cul seront données au président. La nouvelle partie peut alors démarrer.
+Lorsque les trois premiers joueurs ont réussi à vider leur main, la partie s'arrête et chaque joueur a une fenêtre lui indiquant son résultat et demande s'il désire rejouer. Si les quatres joueurs rejouent, une nouvelle partie se lance. Le président donnera deux cartes de son choix au trou-du-cul, le vice-président une au vice-trou-du-cul, ce dernier verra sa meilleure carte donnée au vice-président et les deux meilleures cartes du trou-du-cul seront données au président. La nouvelle partie peut alors démarrer.
