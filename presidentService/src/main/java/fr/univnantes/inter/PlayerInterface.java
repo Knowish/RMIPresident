@@ -45,4 +45,6 @@ public interface PlayerInterface extends Remote {
     void removeCardFromHand(Card cardToRemove) throws RemoteException;
 
     boolean askKeepPlaying(int rank) throws RemoteException;
+
+    void goBackToLogin() throws RemoteException;
 }

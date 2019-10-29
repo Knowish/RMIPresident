@@ -31,6 +31,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     private int orderOfPlay; //the number correspond to the place of the player around the table 0 -> 1 -> 2 -> 3
     private List<PlayerInterface> opponents;
     private GameBoard gameBoard;
+    private GuiBuilder guiBuilder;
 
 
 
@@ -337,12 +338,23 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     }
 
     @Override
-    public void run() {
+    public void goBackToLogin() throws RemoteException {
+        this.guiBuilder.dispose();
+        displayGui();
+    }
+
+    private void displayGui(){
         GuiBuilder frame = new GuiBuilder(this);
+        this.guiBuilder = frame;
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    @Override
+    public void run() {
+        displayGui();
     }
 }
