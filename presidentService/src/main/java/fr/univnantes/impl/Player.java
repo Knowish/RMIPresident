@@ -75,8 +75,8 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     }
 
     @Override
-    public Card playCard(Card lastCard) throws RemoteException, InterruptedException {
-        Card chosenCard = chooseCard(lastCard);
+    public Card playCard(Card lastCard, boolean mustPlaySameValue) throws RemoteException, InterruptedException {
+        Card chosenCard = chooseCard(lastCard, mustPlaySameValue);
         myTurn = false;
         return chosenCard;
     }
@@ -84,18 +84,22 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     /**
      * Prompt the user to choose a card
      * @param
+     * @param mustPlaySameValue
      * @return
      * @throws InterruptedException
      */
-    public Card chooseCard(Card lastCard) throws InterruptedException, RemoteException {
+    public Card chooseCard(Card lastCard, boolean mustPlaySameValue) throws InterruptedException, RemoteException {
 
         Card chosenCard = lastCard;
-        List<Card> cardsICanPlay = this.cardsICanPlay(chosenCard);
+        List<Card> cardsICanPlay = this.cardsICanPlay(chosenCard, mustPlaySameValue);
 
         String cardName = gameBoard.promptCardChoice(cardsICanPlay, "Choose one of the following or pass your turn :");
 
-        if(cardName==null || cardsICanPlay.isEmpty()){
-            pass();
+        if(cardName==null || cardsICanPlay.isEmpty()) {
+            if (mustPlaySameValue)
+                setMyTurn(false);
+            else
+                pass();
         } else {
             chosenCard = findCardWithName(cardName);
             hand.remove(chosenCard);
@@ -249,17 +253,24 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     /**
      * return the list of the cards the players have in its hand and that are playable ( >= to the last card played )
      * @param lastCardPlayed
+     * @param mustPlaySameValue
      * @return
      */
-    public List<Card> cardsICanPlay(Card lastCardPlayed){
+    public List<Card> cardsICanPlay(Card lastCardPlayed, boolean mustPlaySameValue) {
         List<Card> playableCards = new ArrayList<>();
 
-        for (Card cardInMyHand : hand ){
-            if (cardInMyHand.getValue() >= lastCardPlayed.getValue() ){
-                playableCards.add(cardInMyHand);
+        for (Card cardInMyHand : hand) {
+            if (mustPlaySameValue) {
+                if (cardInMyHand.compareTo(lastCardPlayed) == 0) {
+                    playableCards.add(cardInMyHand);
+                }
+            } else {
+                if (cardInMyHand.compareTo(lastCardPlayed) >= 0) {
+                    playableCards.add(cardInMyHand);
+                }
             }
         }
-        return  playableCards;
+        return playableCards;
     }
 
     @Override

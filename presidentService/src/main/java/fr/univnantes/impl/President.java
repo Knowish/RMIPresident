@@ -18,6 +18,7 @@ public class President extends Game implements Runnable {
     private List<PlayerInterface> winOrder = new ArrayList<>();
     private boolean firstRound = true;
     private int nbOfPlayers;
+    private boolean mustPlaySameValue = false;
 
     public President() {
         super();
@@ -151,11 +152,14 @@ public class President extends Game implements Runnable {
                 lastCardOnBoard = this.board.get(this.board.size() - 1);
             }
             //le joueur joue une carte
-            Card playedCard = currentPlayer.playCard(lastCardOnBoard);
+            Card playedCard = currentPlayer.playCard(lastCardOnBoard, mustPlaySameValue);
 
             //if the player played a card
             if (!playedCard.equals(lastCardOnBoard)) {
-                cardHasBeenPlayed(currentPlayer, playedCard);
+                cardHasBeenPlayed(currentPlayer, playedCard, lastCardOnBoard);
+            } else {
+                if (this.mustPlaySameValue)
+                    this.mustPlaySameValue = false;
             }
         }
 
@@ -163,14 +167,21 @@ public class President extends Game implements Runnable {
 
     }
 
-    private void cardHasBeenPlayed(PlayerInterface currentPlayer, Card playedCard) throws RemoteException, InterruptedException {
+    private void cardHasBeenPlayed(PlayerInterface currentPlayer, Card playedCard, Card lastCardOnBoard) throws RemoteException, InterruptedException {
         this.board.add(playedCard); //Last Card is added at the end of the list
         updateAllTricks(playedCard);
+
+        if (this.board.size() >= 2) {
+            if (playedCard.compareTo(lastCardOnBoard) == 0)
+                this.mustPlaySameValue = true;
+        }
 
         //si le joueur à posé toute ses cartes, il a fini pour ce round
         if (currentPlayer.getHand().isEmpty()) {
             this.winOrder.add(currentPlayer);
-            cleanGame();
+            //On ne joue pas par dessus le président
+            if (this.winOrder.size() == 1)
+                cleanGame();
             System.out.println("Le joueur " + currentPlayer.getUserName()
                     + " a posé toutes ses cartes ! Il est le n°" + (winOrder.indexOf(currentPlayer)+1)
                     + " à terminer.");
@@ -224,6 +235,7 @@ public class President extends Game implements Runnable {
             p.setPassTurn(false);
             p.updateTrick(CardOnBoard);
         }
+        this.mustPlaySameValue = false;
     }
 
     public final void initializeGame() throws RemoteException, InterruptedException {

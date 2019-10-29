@@ -38,7 +38,7 @@ public class PlayerTest {
         player.addToHand(cardtest);
         assertFalse(player.getHand().isEmpty());
         assertTrue(player.getHand().get(0).equals(cardtest));
-        player.playCard(player.getHand().get(0));
+        player.playCard(player.getHand().get(0), false);
         assertTrue(player.getHand().isEmpty());
     }
 
