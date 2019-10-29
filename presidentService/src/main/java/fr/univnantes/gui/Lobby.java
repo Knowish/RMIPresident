@@ -21,15 +21,19 @@ public class Lobby /*implements PropertyChangeListener*/ {
 
     public Lobby(Player player, Border border, CardLayout cl, JPanel cards) throws RemoteException {
 
-            //this.client = client;
-            this.player = player;
-            this.cl = cl;
-            this.cards = cards;
-            usernameDisplayed.setText(player.getUserName());
-            lobby.setBorder(border);
-            //client.addPropertyChangeListener(this);
-            //client.getMyPlayer().addPropertyChangeListener(this);
-            //nbWaitingPlayers.setText(Integer.toString(player.getWaitingPlayers()));
+        //this.client = client;
+        this.player = player;
+        this.cl = cl;
+        this.cards = cards;
+        usernameDisplayed.setText(player.getUserName());
+        lobby.setBorder(border);
+        // Pour retirer l'action de "Entrée" une fois le lobby passé (reste pour le choix de cartes)
+        ((JFrame)this.cards.getParent().getParent().getParent().getParent()).getRootPane().setDefaultButton(null);
+
+        //((JFrame)this.cards.getParent()).getRootPane().setDefaultButton(null);
+        //client.addPropertyChangeListener(this);
+        //client.getMyPlayer().addPropertyChangeListener(this);
+        //nbWaitingPlayers.setText(Integer.toString(player.getWaitingPlayers()));
 
     }
 
@@ -61,6 +65,7 @@ public class Lobby /*implements PropertyChangeListener*/ {
     }
 
     public void changeViewToBoardgame() throws RemoteException {
+
         System.out.println("Je crée la gameBoard");
         GameBoard gameboardView = new GameBoard(player);
         player.setGameBoard(gameboardView);
