@@ -41,7 +41,7 @@ abstract class Game implements Serializable {
     public void generateCardPool() {
 
         String[] colors = {SPADE, HEART, DIAMOND, CLUB};
-
+        this.board.clear();
         for (String color : colors) {
             for  (int i = MIN_VALUE_CARD; i < NUMBER_CARDS_PER_COLOR + MIN_VALUE_CARD; ++i) { // i : 3 -> 15
                 this.board.add(new Card(i, matchValueToName(i) + " " + color));
