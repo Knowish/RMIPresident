@@ -5,11 +5,12 @@ import fr.univnantes.impl.Player;
 import fr.univnantes.inter.PlayerInterface;
 
 import javax.swing.*;
+import java.awt.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameBoard {
+public class GameBoard extends JFrame{
 
     private Player player;
     private JPanel panel1;
@@ -28,9 +29,13 @@ public class GameBoard {
     private String namePlayer2;
     private String namePlayer3;
     private String namePlayer4;
+    private CardLayout cl;
+    private JPanel cards;
 
-    public GameBoard(Player player) throws RemoteException {
+    public GameBoard(Player player, CardLayout cl, JPanel cards) throws RemoteException {
         this.player = player;
+        this.cl = cl;
+        this.cards=cards;
         opponents = player.getOpponents();
 
         myName.setText(player.getUserName());

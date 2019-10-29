@@ -55,6 +55,9 @@ public class President extends Game implements Runnable {
                 gameOver = true;
             }
         }
+        for(PlayerInterface player : players) {
+            player.goBackToLogin();
+        }
     }
 
     //Defini la phase d'échange de cartes entre les joueurs

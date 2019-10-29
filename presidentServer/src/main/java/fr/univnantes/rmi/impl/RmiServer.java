@@ -40,7 +40,6 @@ public class RmiServer extends Observable implements RmiService {
 
     }
 
-    //TODO: On ferait pas un petit producteur consomateur ici?
     @Override
     synchronized public void joinGame(PlayerInterface o) throws RemoteException {
         WrappedObserver mo = new WrappedObserver(o);
@@ -54,14 +53,14 @@ public class RmiServer extends Observable implements RmiService {
         setChanged();
         notifyObservers(numberOfPendingPlayers);
 
-        if (pendingPlayers.size() >= NB_PLAYERS) {
+        if (pendingPlayers.size() == NB_PLAYERS) {
             List<PlayerInterface> startingPlayers = initGame();
             President game = new President(startingPlayers);
+            numberOfPendingPlayers = pendingPlayers.size() ;
         }
 
     }
 
-    //TODO : Voir si on peut pas mieux faire deux boucles c'est nul
     public List<PlayerInterface> initGame() throws RemoteException{
         System.out.println("On a tous les joueurs");
         List<PlayerInterface> startingPlayers = new ArrayList<>();
@@ -83,7 +82,6 @@ public class RmiServer extends Observable implements RmiService {
             PlayerInterface currentPlayer = pendingPlayers.remove(0);
             currentPlayer.startGame();
         }
-
         return startingPlayers;
     }
 
