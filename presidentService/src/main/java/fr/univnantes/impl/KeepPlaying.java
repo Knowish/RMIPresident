@@ -43,7 +43,7 @@ public class KeepPlaying {
                 long timeBefore = System.currentTimeMillis();
                 wait(30000);
                 if(System.currentTimeMillis() - timeBefore > 30000 ){
-                    keepPlaying = false;
+                    continuePlaying=false;
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

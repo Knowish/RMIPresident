@@ -14,16 +14,21 @@ import java.util.*;
 public class RmiServer extends Observable implements RmiService {
 
     private List<PlayerInterface> pendingPlayers;
+    private List<WrappedObserver> observers;
     private int numberOfPendingPlayers;
     private final int NB_PLAYERS = 4; //the maximum of players in a game
 
+    /**
+     * define an observer. It is used to notify the pending players when a new player is
+     * joining the game.
+     */
     private class WrappedObserver implements Observer, Serializable {
 
         private static final long serialVersionUID = 1L;
 
         private PlayerInterface ro;
 
-        public WrappedObserver(PlayerInterface ro) {
+        WrappedObserver(PlayerInterface ro) {
             this.ro = ro;
         }
 
@@ -40,29 +45,42 @@ public class RmiServer extends Observable implements RmiService {
 
     }
 
+    /**
+     * allows a player to join a game
+     * @param o the new player who joins the game
+     * @throws RemoteException when the server cannot communicate with the player
+     */
     @Override
     synchronized public void joinGame(PlayerInterface o) throws RemoteException {
+
+        //add the player as an observer so he can be notified when another player
+        //joins the game
         WrappedObserver mo = new WrappedObserver(o);
         addObserver(mo);
 
-        System.out.println("Added observer:" + mo);
-
         pendingPlayers.add(o);
+        observers.add(mo);
         numberOfPendingPlayers ++ ;
 
         setChanged();
         notifyObservers(numberOfPendingPlayers);
 
         if (pendingPlayers.size() == NB_PLAYERS) {
+
             List<PlayerInterface> startingPlayers = initGame();
-            President game = new President(startingPlayers);
+            new President(startingPlayers);
             numberOfPendingPlayers = pendingPlayers.size() ;
         }
 
     }
 
-    public List<PlayerInterface> initGame() throws RemoteException{
-        System.out.println("On a tous les joueurs");
+    /**
+     * Initialise the game by sending to all the players their opponents, removing all the players
+     * from the pending players and change their view
+     * @return the players who are in the same game
+     * @throws RemoteException when the player cannot communicate with the server
+     */
+    private List<PlayerInterface> initGame() throws RemoteException {
         List<PlayerInterface> startingPlayers = new ArrayList<>();
 
         //premiere boucle pour definir le nom des adversaires pour chaque joueur
@@ -80,31 +98,27 @@ public class RmiServer extends Observable implements RmiService {
         //deuxieme boucle pour leur dire de commencer à jouer et les enlever de la liste des joueurs en attente
         for (int i = 0; i < NB_PLAYERS ; ++i) {
             PlayerInterface currentPlayer = pendingPlayers.remove(0);
+            deleteObserver(observers.remove(0));
             currentPlayer.startGame();
         }
         return startingPlayers;
     }
 
     @Override
-    public int getNumberOfPendingPlayers() throws RemoteException {
+    public int getNumberOfPendingPlayers() {
         return numberOfPendingPlayers;
     }
 
-    public RmiServer() {
+    private RmiServer() {
         pendingPlayers= new ArrayList<>();
+        observers = new ArrayList<>();
         numberOfPendingPlayers=0;
-        thread.start();
-    }
-
-    Thread thread = new Thread() {
-        @Override
-        public void run() {
+        Thread thread = new Thread(() -> {
             while (true) {
             }
-        }
-    };
-
-    private static final long serialVersionUID = 1L;
+        });
+        thread.start();
+    }
 
     public static void main(String[] args) {
         try {

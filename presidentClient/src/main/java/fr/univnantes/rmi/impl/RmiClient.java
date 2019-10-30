@@ -11,24 +11,16 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient {
     private int waitingPlayers;
     private PropertyChangeSupport support;
 
-    protected RmiClient() throws RemoteException {
+    private RmiClient() throws RemoteException {
         super();
         support = new PropertyChangeSupport(this);
     }
-
-//    public void addPropertyChangeListener(PropertyChangeListener pcl) {
-//        support.addPropertyChangeListener(pcl);
-//    }
-//
-//    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-//        support.removePropertyChangeListener(pcl);
-//    }
 
     public static void main(String[] args) {
 
         try {
 
-            RmiClient client = new RmiClient();
+            new RmiClient();
             Player myPlayer = new Player();
             myPlayer.run();
 
@@ -38,14 +30,13 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient {
     }
 
     @Override
-    public void update(Object observable, Object updateMsg)
-            throws RemoteException {
+    public void update(Object observable, Object updateMsg) {
         System.out.println("Received a signal from the server");
         setWaitingPlayers((Integer) updateMsg);
 
     }
 
-    public void setWaitingPlayers(int value) {
+    private void setWaitingPlayers(int value) {
         support.firePropertyChange("waitingPlayers", this.waitingPlayers, value);
         this.waitingPlayers = value;
     }
