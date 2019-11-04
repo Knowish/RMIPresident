@@ -5,11 +5,13 @@ import fr.univnantes.impl.Player;
 import fr.univnantes.inter.PlayerInterface;
 
 import javax.swing.*;
-import java.awt.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the view a player get when playing the game.
+ */
 public class GameBoard extends JFrame{
 
     private Player player;
@@ -29,13 +31,9 @@ public class GameBoard extends JFrame{
     private String namePlayer2;
     private String namePlayer3;
     private String namePlayer4;
-    private CardLayout cl;
-    private JPanel cards;
 
-    public GameBoard(Player player, CardLayout cl, JPanel cards) throws RemoteException {
+    GameBoard(Player player) throws RemoteException {
         this.player = player;
-        this.cl = cl;
-        this.cards=cards;
         opponents = player.getOpponents();
 
         myName.setText(player.getUserName());
@@ -57,62 +55,11 @@ public class GameBoard extends JFrame{
         });
     }
 
-    public JPanel getPanel1() {
+    JPanel getPanel1() {
         return panel1;
     }
 
-    public void setPanel1(JPanel panel1) {
-        this.panel1 = panel1;
-    }
-
-    public boolean promptUserChoice() throws RemoteException {
-        //default title and icon
-        /*JOptionPane.showMessageDialog(panel1,
-                "Do you want to pass?");
-        player.pass();*/
-
-        boolean res = false;
-
-        Object[] options = {"Play a card",
-                "Pass my turn"};
-        int n = JOptionPane.showOptionDialog(panel1,
-                "Do you want to play a card?",
-                "Your turn!",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,     //do not use a custom Icon
-                options,  //the titles of buttons
-                options[0]); //default button title
-
-        try {
-
-            switch (n){
-                case 0 :
-                    System.out.println("Je joue une carte");
-                    res = true;
-                    break;
-
-                case 1:
-                    player.pass();
-                    res = false;
-                    break;
-
-
-                default:
-                    player.pass();
-                    res = false;
-                    break;
-
-            }
-
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public String promptCardChoice(List<Card> cardsICanPlay, String windowTitle) throws RemoteException {
+    public String promptCardChoice(List<Card> cardsICanPlay, String windowTitle) {
 
         String result = "";
         if(!cardsICanPlay.isEmpty()) {
@@ -123,12 +70,6 @@ public class GameBoard extends JFrame{
 
             Object[] possibilities = cardsName.toArray();
 
-
-        /*String res = JEnhancedOptionPane.showInputDialog("Choose one of the following or pass your turn :",
-                new Object[]{"Play", "Pass"},
-                possibilities,
-                possibilities[0],
-                "Choose a card");*/
             result = (String) JOptionPane.showInputDialog(
                     panel1,
                     windowTitle,
@@ -155,14 +96,12 @@ public class GameBoard extends JFrame{
             player3Name.setText(namePlayer3 + ", number of cards left : " + opponents.get(1).getHand().size());
             player4Name.setText(namePlayer4 + ", number of cards left : " + opponents.get(2).getHand().size());
 
-            //cardList1.updateCards(player.getHand());
-
             String imdead, p2dead, p3dead, p4dead;
 
-            imdead = player.isPassTurn() ? "DEAD" : "";
-            p2dead = opponents.get(0).isPassTurn() ? "DEAD" : "";
-            p3dead = opponents.get(1).isPassTurn() ? "DEAD" : "";
-            p4dead = opponents.get(2).isPassTurn() ? "DEAD" : "";
+            imdead = player.isPassTurn() ? "PASSED" : "";
+            p2dead = opponents.get(0).isPassTurn() ? "PASSED" : "";
+            p3dead = opponents.get(1).isPassTurn() ? "PASSED" : "";
+            p4dead = opponents.get(2).isPassTurn() ? "PASSED" : "";
 
             if(player.isMyTurn()){
 
@@ -186,7 +125,7 @@ public class GameBoard extends JFrame{
                 turnPlayer3.setText("His turn");
                 turnPlayer4.setText(p4dead);
 
-            } else if (opponents.get(2).isMyTurn()) { //TODO:Cette ligne est que pour les tests, faudra l'enlever
+            } else if (opponents.get(2).isMyTurn()) {
 
                 myTurn.setText(imdead);
                 turnPlayer2.setText(p2dead);
@@ -202,7 +141,7 @@ public class GameBoard extends JFrame{
 
     }
 
-    public void setTrick(Card card) throws  RemoteException{
+    public void setTrick(Card card) {
         List<Card> listTas = new ArrayList<>();
         listTas.add(card);
         trick.updateCards(listTas);
@@ -232,13 +171,13 @@ public class GameBoard extends JFrame{
 
     public void showUserExchangedCards(Card exchangedCard, int roleToExchangeTo) {
         String labelOfTheRoleToExchangeTo = getLabelCorrespondingToRole(roleToExchangeTo);
-        JOptionPane.showMessageDialog(panel1, "Vous allez échanger cette carte avec le "+labelOfTheRoleToExchangeTo+" : "+exchangedCard.getName());
+        JOptionPane.showMessageDialog(panel1, "You are going to exchange this card with the "+labelOfTheRoleToExchangeTo+" : "+exchangedCard.getName());
     }
 
     public boolean askKeepPlaying(int rank) {
         String rankTitle = getLabelCorrespondingToRole(rank);
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        int dialogResult = JOptionPane.showConfirmDialog (null, "Round Over! You are "+rankTitle+". Would You Like to keep playing?","Keep Playing?",dialogButton);
+        int dialogResult = JOptionPane.showConfirmDialog (null, "Round Over! You are "+rankTitle+". Would you like to keep playing?","Keep playing?",dialogButton);
         return dialogResult == JOptionPane.YES_OPTION;
     }
 }

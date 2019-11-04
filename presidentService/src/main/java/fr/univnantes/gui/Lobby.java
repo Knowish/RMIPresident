@@ -4,61 +4,36 @@ import fr.univnantes.impl.Player;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 
-public class Lobby /*implements PropertyChangeListener*/ {
+/**
+ * This class is used to represent the lobby, where the player will wait until the game is created
+ */
+public class Lobby {
     private JPanel lobby;
     private JLabel playersFoundCount;
     private JLabel nbWaitingPlayers;
     private JLabel usernameDisplayed;
-    //private RmiClient client;
     private Player player;
-    private int nbPendingPlayers;
     private CardLayout cl;
     private JPanel cards;
 
-    public Lobby(Player player, Border border, CardLayout cl, JPanel cards) throws RemoteException {
+    Lobby(Player player, Border border, CardLayout cl, JPanel cards) throws RemoteException {
 
-        //this.client = client;
         this.player = player;
         this.cl = cl;
         this.cards = cards;
         usernameDisplayed.setText(player.getUserName());
         lobby.setBorder(border);
+        playersFoundCount.setText("Players found :");
         // Pour retirer l'action de "Entrée" une fois le lobby passé (reste pour le choix de cartes)
         ((JRootPane)this.cards.getParent().getParent().getParent()).setDefaultButton(null);
 
-        //((JFrame)this.cards.getParent()).getRootPane().setDefaultButton(null);
-        //client.addPropertyChangeListener(this);
-        //client.getMyPlayer().addPropertyChangeListener(this);
-        //nbWaitingPlayers.setText(Integer.toString(player.getWaitingPlayers()));
-
     }
 
-    public JPanel getPanell() {
+    JPanel getPanell() {
         return lobby;
     }
-
-    /*
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        switch (evt.getPropertyName()){
-            case "waitingPlayers" : {
-                nbPendingPlayers = (Integer) evt.getNewValue();
-                nbWaitingPlayers.setText(Integer.toString(nbPendingPlayers));
-                break;
-            }
-
-            case "gameInit" : {
-                System.out.println("Je crée ma troisième vue");
-                createGameBoardView();
-                break;
-            }
-        }
-
-    }*/
 
     public void updateTextWaitingPlayer(String waitingPlayersNumber){
         nbWaitingPlayers.setText(waitingPlayersNumber);
@@ -67,7 +42,7 @@ public class Lobby /*implements PropertyChangeListener*/ {
     public void changeViewToBoardgame() throws RemoteException {
 
         System.out.println("Je crée la gameBoard");
-        GameBoard gameboardView = new GameBoard(player, cl, cards);
+        GameBoard gameboardView = new GameBoard(player);
         player.setGameBoard(gameboardView);
         JPanel nextPanel = gameboardView.getPanel1();
         cards.add(nextPanel, "Third Panel");

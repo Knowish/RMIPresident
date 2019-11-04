@@ -5,6 +5,9 @@ import fr.univnantes.impl.Card;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This class represents the hands of cards of the player
+ */
 public class CardList extends JPanel {
 
     public CardList() {
@@ -12,7 +15,7 @@ public class CardList extends JPanel {
         setLayout(new GridLayout(1, 13));
 }
 
-    public void updateCards(java.util.List<Card> cards) {
+    void updateCards(java.util.List<Card> cards) {
         for (Component comp : getComponents()) {
             remove(comp);
         }

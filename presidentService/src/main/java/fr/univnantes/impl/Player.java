@@ -106,16 +106,6 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
             gameBoard.setTrick(chosenCard);
         }
 
-
-/*
-        if(gameBoard.promptUserChoice()){
-            String cardName = gameBoard.promptCardChoice(cardsICanPlay);
-
-            chosenCard = findCardWithName(cardName);
-            hand.remove(chosenCard);
-        }
-        */
-
         return chosenCard;
     }
 

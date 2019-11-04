@@ -6,28 +6,34 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.rmi.RemoteException;
 
+/**
+ * This class is the view the client get when he launches the application.
+ * It is an invite to connect to the server.
+ */
 public class ConnectToServer {
 
-    private JLabel welcomeToTheRMITextField;
-    private JLabel pleaseChooseAUserTextArea;
     private JTextField writeUsernameHereTextField;
     private JButton findAGameButton;
-    private JPanel panel1;
+    private JPanel panelConnectToServer;
+    private JLabel welcomeToTheRMITextField;
+    private JLabel pleaseChooseAUserTextArea;
 
-    public ConnectToServer(Player player, Border border, CardLayout cl, JPanel cards) {
+    ConnectToServer(Player player, Border border, CardLayout cl, JPanel cards) {
 
-        panel1.setBorder(border);
+        panelConnectToServer.setBorder(border);
 
         findAGameButton.addActionListener(actionEvent -> {
 
             try {
 
                 String username = writeUsernameHereTextField.getText();
+                welcomeToTheRMITextField.setText("Welcome to the RMI president game!");
+                pleaseChooseAUserTextArea.setText("Please choose a user  name and find a game!");
                 player.setUserName(username);
                 Lobby lobbyView = new Lobby(player, border, cl, cards);
                 player.setLobby(lobbyView);
-                JPanel panel2 = lobbyView.getPanell();
-                cards.add(panel2, "Second Panel");
+                JPanel panel = lobbyView.getPanell();
+                cards.add(panel, "Second Panel");
 
             } catch (RemoteException e) {
 
@@ -45,11 +51,11 @@ public class ConnectToServer {
 
     }
 
-    public JPanel getPanel1() {
-        return panel1;
+    JPanel getPanelConnectToServer() {
+        return panelConnectToServer;
     }
 
-    public JButton getFindAGameButton() {
+    JButton getFindAGameButton() {
         return findAGameButton;
     }
 

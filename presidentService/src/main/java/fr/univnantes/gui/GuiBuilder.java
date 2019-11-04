@@ -6,11 +6,10 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
+/**
+ * this class is used to instantiate and build the GUI
+ */
 public class GuiBuilder extends JFrame{
-
-    private final CardLayout cl = new CardLayout();
-    private final JPanel cards = new JPanel(cl);
-    private final Border border = BorderFactory.createEmptyBorder(200, 400, 200, 400);
 
     public GuiBuilder(Player player) {
 
@@ -19,8 +18,11 @@ public class GuiBuilder extends JFrame{
         contentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
 
+        CardLayout cl = new CardLayout();
+        JPanel cards = new JPanel(cl);
+        Border border = BorderFactory.createEmptyBorder(200, 400, 200, 400);
         ConnectToServer connectToServerView = new ConnectToServer(player, border, cl, cards);
-        JPanel panel1 = connectToServerView.getPanel1();
+        JPanel panel1 = connectToServerView.getPanelConnectToServer();
         cards.add(panel1, "First Panel");
 
         contentPane.add(cards);
