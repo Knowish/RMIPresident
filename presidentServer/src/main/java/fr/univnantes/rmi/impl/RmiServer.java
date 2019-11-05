@@ -81,6 +81,7 @@ public class RmiServer extends Observable implements RmiService {
      * @throws RemoteException when the player cannot communicate with the server
      */
     private List<PlayerInterface> initGame() throws RemoteException {
+
         List<PlayerInterface> startingPlayers = new ArrayList<>();
 
         //premiere boucle pour definir le nom des adversaires pour chaque joueur

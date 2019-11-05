@@ -1,5 +1,6 @@
 package fr.univnantes.impl;
 
+import fr.univnantes.gui.ConnectToServer;
 import fr.univnantes.gui.GameBoard;
 import fr.univnantes.gui.GuiBuilder;
 import fr.univnantes.gui.Lobby;
@@ -27,6 +28,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     private PropertyChangeSupport support;
     private boolean myTurn;
     private Lobby lobby;
+    private ConnectToServer connectToServerView;
     private RmiService remoteService;
     private int orderOfPlay; //the number correspond to the place of the player around the table 0 -> 1 -> 2 -> 3
     private List<PlayerInterface> opponents;
@@ -339,12 +341,12 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     }
 
     @Override
-    public void goBackToLogin() throws RemoteException {
+    public void goBackToLogin(String message) throws RemoteException {
         this.guiBuilder.dispose();
-        displayGui();
+        displayGui(message);
     }
 
-    private void displayGui(){
+    private void displayGui(String message){
         GuiBuilder frame = new GuiBuilder(this);
         this.guiBuilder = frame;
 
@@ -352,10 +354,18 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        if (!message.equals("")){
+            connectToServerView.displayMessage(message);
+        }
+
     }
 
     @Override
     public void run() {
-        displayGui();
+        displayGui("");
+    }
+
+    public void setConnectToServerView(ConnectToServer connectToServer) {
+        this.connectToServerView = connectToServer;
     }
 }

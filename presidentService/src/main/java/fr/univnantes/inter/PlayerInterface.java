@@ -46,5 +46,5 @@ public interface PlayerInterface extends Remote {
 
     boolean askKeepPlaying(int rank) throws RemoteException;
 
-    void goBackToLogin() throws RemoteException;
+    void goBackToLogin(String message) throws RemoteException;
 }

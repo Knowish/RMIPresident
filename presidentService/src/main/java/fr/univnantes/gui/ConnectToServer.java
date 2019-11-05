@@ -32,6 +32,7 @@ public class ConnectToServer {
                 player.setUserName(username);
                 Lobby lobbyView = new Lobby(player, border, cl, cards);
                 player.setLobby(lobbyView);
+                player.setConnectToServerView(this);
                 JPanel panel = lobbyView.getPanell();
                 cards.add(panel, "Second Panel");
 
@@ -59,5 +60,8 @@ public class ConnectToServer {
         return findAGameButton;
     }
 
+    public void displayMessage(String message) {
+        JOptionPane.showMessageDialog(panelConnectToServer, message);
+    }
 }
 

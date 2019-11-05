@@ -33,32 +33,36 @@ public class President extends Game implements Runnable {
     @Override
     public void playGame() throws RemoteException, InterruptedException {
         while(!gameOver){
-            initializeGame();
-            int i = this.players.indexOf(identifyFirstPlayer());
-            System.out.println(this.board.toString());
-            System.out.println("Le board doit être vide pour commencer : " + this.board.isEmpty());
+            //try-catch pour la deconnexion d'un joueur pendant la partie
+                try {
+                initializeGame();
+                int i = this.players.indexOf(identifyFirstPlayer());
+                System.out.println(this.board.toString());
+                System.out.println("Le board doit être vide pour commencer : " + this.board.isEmpty());
 
-            this.winOrder.clear();
-            while(!roundIsDone()) {
-                PlayerInterface currentPlayer = this.players.get(i);
-                currentPlayer.setMyTurn(true);
-                for(PlayerInterface player : players) {
-                    player.updateWhosPlaying();
+                this.winOrder.clear();
+                while(!roundIsDone()) {
+                    PlayerInterface currentPlayer = this.players.get(i);
+                    currentPlayer.setMyTurn(true);
+                    for(PlayerInterface player : players) {
+                        player.updateWhosPlaying();
+                    }
+                    playerPlay(currentPlayer);
+                    i = (i+1) % nbOfPlayers;
                 }
-                playerPlay(currentPlayer);
-                i = (i+1) % nbOfPlayers;
-            }
-            firstRound = false;
+                firstRound = false;
 
-            KeepPlaying keepPlaying = new KeepPlaying(winOrder);
+                KeepPlaying keepPlaying = new KeepPlaying(winOrder);
 
-            if(!keepPlaying.continuePlaying()){
+                if(!keepPlaying.continuePlaying()){
+                    gameOver = true;
+                }
+
+            }catch (Exception e) {
                 gameOver = true;
             }
         }
-        for(PlayerInterface player : players) {
-            player.goBackToLogin();
-        }
+        disconnectedPlayer();
     }
 
     //Defini la phase d'échange de cartes entre les joueurs
@@ -134,66 +138,81 @@ public class President extends Game implements Runnable {
 
     public void playerPlay(PlayerInterface currentPlayer) throws RemoteException, InterruptedException {
 
-        Card lastCardOnBoard;
+            Card lastCardOnBoard;
 
-        //si tout le monde a passé son tours
-        if (noPlayersRemaining(currentPlayer)) { //Just to fix a tricky case
-            cleanGame();
-        }
-
-        //si le joueur n'a pas passé son tour auparavant et s'il a des cartes en main
-        if (canPlay(currentPlayer)) {
-
-            //si aucune carte n'a encore été placé au milieu au place une carte de valeur 0
-            if (this.board.isEmpty()) {
-                lastCardOnBoard = new Card();
-            } else {
-                //sinon on actualise la valeur de la dernière carte à avoir été jouée
-                lastCardOnBoard = this.board.get(this.board.size() - 1);
+            //si tout le monde a passé son tours
+            if (noPlayersRemaining(currentPlayer)) { //Just to fix a tricky case
+                cleanGame();
             }
-            //le joueur joue une carte
-            Card playedCard = currentPlayer.playCard(lastCardOnBoard, mustPlaySameValue);
 
-            //if the player played a card
-            if (!playedCard.equals(lastCardOnBoard)) {
-                cardHasBeenPlayed(currentPlayer, playedCard, lastCardOnBoard);
-            } else {
-                if (this.mustPlaySameValue)
-                    this.mustPlaySameValue = false;
+            //si le joueur n'a pas passé son tour auparavant et s'il a des cartes en main
+            if (canPlay(currentPlayer)) {
+
+                //si aucune carte n'a encore été placé au milieu au place une carte de valeur 0
+                if (this.board.isEmpty()) {
+                    lastCardOnBoard = new Card();
+                } else {
+                    //sinon on actualise la valeur de la dernière carte à avoir été jouée
+                    lastCardOnBoard = this.board.get(this.board.size() - 1);
+                }
+                //le joueur joue une carte
+                Card playedCard = currentPlayer.playCard(lastCardOnBoard, mustPlaySameValue);
+
+                //if the player played a card
+                if (!playedCard.equals(lastCardOnBoard)) {
+                    cardHasBeenPlayed(currentPlayer, playedCard, lastCardOnBoard);
+                } else {
+                    if (this.mustPlaySameValue)
+                        this.mustPlaySameValue = false;
+                }
             }
-        }
 
-        currentPlayer.setMyTurn(false);
-
+            currentPlayer.setMyTurn(false);
     }
 
     private void cardHasBeenPlayed(PlayerInterface currentPlayer, Card playedCard, Card lastCardOnBoard) throws RemoteException, InterruptedException {
         this.board.add(playedCard); //Last Card is added at the end of the list
-        updateAllTricks(playedCard);
 
-        if (this.board.size() >= 2) {
-            if (playedCard.compareTo(lastCardOnBoard) == 0)
-                this.mustPlaySameValue = true;
-        }
+            updateAllTricks(playedCard);
 
-        //si le joueur à posé toute ses cartes, il a fini pour ce round
-        if (currentPlayer.getHand().isEmpty()) {
-            this.winOrder.add(currentPlayer);
-            //On ne joue pas par dessus le président
-            if (this.winOrder.size() == 1)
+            if (this.board.size() >= 2) {
+                if (playedCard.compareTo(lastCardOnBoard) == 0)
+                    this.mustPlaySameValue = true;
+            }
+
+            //si le joueur à posé toute ses cartes, il a fini pour ce round
+            if (currentPlayer.getHand().isEmpty()) {
+                this.winOrder.add(currentPlayer);
+                //On ne joue pas par dessus le président
+                if (this.winOrder.size() == 1)
+                    cleanGame();
+                System.out.println("Le joueur " + currentPlayer.getUserName()
+                        + " a posé toutes ses cartes ! Il est le n°" + (winOrder.indexOf(currentPlayer)+1)
+                        + " à terminer.");
+            }
+            //The player plays a 2, or formed a square, or everyone passed his turn
+            else if (!currentPlayer.getHand().isEmpty() &&
+                    (playedCard.getValue() == 15
+                            || squareFormed()
+                            || noPlayersRemaining(currentPlayer))) {
+                System.out.println("Le joueur " + currentPlayer.getUserName() + " prend la main.");
                 cleanGame();
-            System.out.println("Le joueur " + currentPlayer.getUserName()
-                    + " a posé toutes ses cartes ! Il est le n°" + (winOrder.indexOf(currentPlayer)+1)
-                    + " à terminer.");
-        }
-        //The player plays a 2, or formed a square, or everyone passed his turn
-        else if (!currentPlayer.getHand().isEmpty() &&
-                (playedCard.getValue() == 15
-                        || squareFormed()
-                        || noPlayersRemaining(currentPlayer))) {
-            System.out.println("Le joueur " + currentPlayer.getUserName() + " prend la main.");
-            cleanGame();
-            playerPlay(currentPlayer);//Play again if you have taken over
+                playerPlay(currentPlayer);//Play again if you have taken over
+            }
+    }
+
+    /**
+     * Finish the game when one of the player disconnected
+     */
+    private void disconnectedPlayer() {
+        for (PlayerInterface player:players){
+            new Thread(() -> {
+                try {
+                    player.goBackToLogin("Game Over! A player disconnected from the game");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
     }
 
