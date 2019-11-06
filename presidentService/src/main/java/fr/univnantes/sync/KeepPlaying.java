@@ -23,8 +23,7 @@ public class KeepPlaying {
 
     /**
      * return true if all players agree to keep playing or false if a timeout is reached or a player decided to stop playing
-     * @return
-     * @throws InterruptedException
+     * @return true if the player wants to play another game
      */
     public synchronized boolean continuePlaying() {
         boolean keepPlaying = true;
@@ -55,7 +54,7 @@ public class KeepPlaying {
         return keepPlaying;
     }
 
-    public synchronized void answer(boolean answer){
+    synchronized void answer(boolean answer){
         if(!answer){
             continuePlaying = false;
         }

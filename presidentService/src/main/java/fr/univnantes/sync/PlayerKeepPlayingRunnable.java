@@ -12,7 +12,7 @@ public class PlayerKeepPlayingRunnable implements Runnable {
     private int rank; //the rank of the player
 
 
-    public PlayerKeepPlayingRunnable(KeepPlaying keepPlaying, PlayerInterface player, int rank) {
+    PlayerKeepPlayingRunnable(KeepPlaying keepPlaying, PlayerInterface player, int rank) {
         this.lock = keepPlaying;
         this.player = player;
         this.rank = rank;

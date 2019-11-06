@@ -58,7 +58,7 @@ public class President extends Game implements Runnable {
                 }
                 firstRound = false;
 
-                    KeepPlaying keepPlaying = new KeepPlaying(winOrder);
+                KeepPlaying keepPlaying = new KeepPlaying(winOrder);
 
                 if(!keepPlaying.continuePlaying()){
                     gameOver = true;
