@@ -35,3 +35,8 @@ Lorsque les trois premiers joueurs ont réussi à vider leur main, la partie s'a
 Comme mentionné ci-dessus, une partie ne peut commencer que lorsque quatre joueurs sont réunis. Il nous faut donc un système qui permette d'indiquer aux clients le nombre de joueurs en attente et de les avertir lorsqu'une partie a été trouvé. Pour ce faire, nous avons pris la décision de mettre en application un pattern observer. 
 Le server hérite de l'interface Observable. À chaque fois qu'un Client va rejoindre le serveur, un objet ClientObserver va lui être affecté. De plus, une variable indiquant le nombre de joueur en attente va être incrémentée. À chaque fois que la valeur de cette variable est modifiée, le server va notifier tout ses ClientObserver. Cette mécanique peut être observée dans la classe RmiServer du projet presidentServer.
 
+2. Fin d'une manche
+
+À la fin d'une manche, les joueurs doivent décider s'ils veulent continuer la partie. Il suffit qu'un seul des joueurs decide de ne plus vouloir jouer pour mettre fin à la partie. Ce mécanisme est représenté dans la classe KeepPlaying du projet presidentService.
+Le serveur va créer un thread pour chaque joueur. Tant que le serveur n'a pas obtenu la réponse de chaque joueur ou qu'un joueur ne souhaite plus jouer ou qu'aucune réponse n'a été donné depuis 30 secondes, le serveur va attendre 30 secondes. À chaque fois qu'un joueur va donner sa réponse, il va notifier le serveur. Si aucune des conditions d'arrêt de la partie n'est obtenue, la partie peut continuer. 
+
