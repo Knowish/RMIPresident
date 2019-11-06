@@ -27,3 +27,22 @@ Il doit pour cela sélectionner la carte qu'il désire placer dans la liste dér
 # IV. Fin de la partie
 
 Lorsque les trois premiers joueurs ont réussi à vider leur main, la partie s'arrête et chaque joueur a une fenêtre lui indiquant son résultat et demande s'il désire rejouer. Si les quatres joueurs rejouent, une nouvelle partie se lance. Le président donnera deux cartes de son choix au trou-du-cul, le vice-président une au vice-trou-du-cul, ce dernier verra sa meilleure carte donnée au vice-président et les deux meilleures cartes du trou-du-cul seront données au président. La nouvelle partie peut alors démarrer.
+
+# V. Points de synchronisation dans l'application 
+
+1. Attente d'une partie.
+
+Comme mentionné ci-dessus, une partie ne peut commencer que lorsque quatre joueurs sont réunis. Il nous faut donc un système qui permette d'indiquer aux clients le nombre de joueurs en attente et de les avertir lorsqu'une partie a été trouvé. Pour ce faire, nous avons pris la décision de mettre en application un pattern observer. 
+Le server hérite de l'interface Observable. À chaque fois qu'un Client va rejoindre le serveur, un objet ClientObserver va lui être affecté. De plus, une variable indiquant le nombre de joueur en attente va être incrémentée. À chaque fois que la valeur de cette variable est modifiée, le server va notifier tout ses ClientObserver. Cette mécanique peut être observée dans la classe RmiServer du projet presidentServer.
+
+2. Fin d'une manche
+
+À la fin d'une manche, les joueurs doivent décider s'ils veulent continuer la partie. Il suffit qu'un seul des joueurs decide de ne plus vouloir jouer pour mettre fin à la partie. Ce mécanisme est représenté dans la classe KeepPlaying du projet presidentService.
+Le serveur va créer un thread pour chaque joueur. Tant que le serveur n'a pas obtenu la réponse de chaque joueur ou qu'un joueur ne souhaite plus jouer ou qu'aucune réponse n'a été donné depuis 30 secondes, le serveur va attendre 30 secondes. À chaque fois qu'un joueur va donner sa réponse, il va notifier le serveur. Si aucune des conditions d'arrêt de la partie n'est obtenue, la partie peut continuer. 
+
+3. Echange de cartes
+
+Comme mentionné ci-dessus, les joueurs doivent échanger des cartes entre eux dès le début de la deuxième manche. Le mécanisme d'échange est décrit dans la méthode exchangeCardsPhase de la classe President du projet presidentService. Le serveur va créer un ExchangerRunnable pour chaque joueur. Ce Runnable va utiliser un objet Exchanger pour mener à bien son échange. 
+
+4. La partie
+
