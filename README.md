@@ -2,13 +2,13 @@
 
 # I. Lancer le serveur
 
-Le serveur va s'exécuter sur la machine sur laquelle il est lancé. Par défaut, il se branchera sur le port 9999. Il est possible de modifier ce port dans le `main()` de la classe **`RmiServer`**.
+Le serveur va s'exécuter sur la machine sur laquelle il est lancé. Par défaut, il se branchera sur le port 9999. Il est possible de modifier ce port dans le `main()` de la classe **`RmiServer`** du projet presidentServer.
 
 Pour le lancer, il suffit d'exécuter ce `main()`.
 
 # II. Lancer le client
 
-Le **`RmiClient`** crée un **`Player`** qui va se connecter au **`RmiServer`**. Il est donc possible de paramétrer la connexion dans la méthode `findGame()` de **`Player`**. Par défaut, il va essayer de se connecter au réseau local sur le port 9999 sur le nom *RmiService*.
+Pour lancer le client, il suffit d'exécuter le main() de la classe **RmiClient** du projet presidentClient. Le **`RmiClient`** crée un **`Player`** qui va se connecter au **`RmiServer`**. Il est donc possible de paramétrer la connexion dans la méthode `findGame()` de **`Player`**. Par défaut, il va essayer de se connecter au réseau local sur le port 9999 sur le nom *RmiService*.
 
 La connexion sera appelée une fois que le client aura entré un nom et cliqué sur le bouton *Find a game!*. Il sera alors dans un salon temporaire, mis en attente d'autres joueurs. Il faut quatre joueurs pour lancer une partie.
 
@@ -46,3 +46,4 @@ Comme mentionné ci-dessus, les joueurs doivent échanger des cartes entre eux d
 
 4. La partie
 
+Le serveur va créer un thread pour chaque partie. Il est ainsi possible d'avoir plusieurs partie en parallèle sur le serveur. C'est le serveur qui va inviter chaque joueur à jouer les un après les autres en appelant la méthode playCard de la classe Player du projet presidentService.
