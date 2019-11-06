@@ -2,6 +2,9 @@ package fr.univnantes.impl;
 
 import java.io.Serializable;
 
+/**
+ * represente une carte à jouer
+ */
 public class Card  implements Serializable, Comparable<Card> {
     private int value;
     private String name;
@@ -20,7 +23,7 @@ public class Card  implements Serializable, Comparable<Card> {
         return name;
     }
 
-    public int getValue() {
+    int getValue() {
         return value;
     }
 

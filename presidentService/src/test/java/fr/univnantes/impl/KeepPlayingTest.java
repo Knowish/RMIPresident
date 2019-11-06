@@ -1,6 +1,7 @@
 package fr.univnantes.impl;
 
 import fr.univnantes.inter.PlayerInterface;
+import fr.univnantes.sync.KeepPlaying;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

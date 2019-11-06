@@ -1,5 +1,6 @@
-package fr.univnantes.impl;
+package fr.univnantes.sync;
 
+import fr.univnantes.impl.Card;
 import fr.univnantes.inter.PlayerInterface;
 
 import java.rmi.RemoteException;

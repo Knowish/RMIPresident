@@ -22,7 +22,7 @@ public interface PlayerInterface extends Remote {
 
     void addOpponent(PlayerInterface opponent) throws RemoteException;
 
-    Card playCard(Card lastCard, boolean mustPlaySameValue) throws RemoteException, InterruptedException;
+    Card playCard(Card lastCard, boolean mustPlaySameValue) throws RemoteException;
 
     boolean isPassTurn() throws RemoteException;
 

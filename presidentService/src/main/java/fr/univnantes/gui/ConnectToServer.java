@@ -24,23 +24,15 @@ public class ConnectToServer {
 
         findAGameButton.addActionListener(actionEvent -> {
 
-            try {
-
-                String username = writeUsernameHereTextField.getText();
-                welcomeToTheRMITextField.setText("Welcome to the RMI president game!");
-                pleaseChooseAUserTextArea.setText("Please choose a user  name and find a game!");
-                player.setUserName(username);
-                Lobby lobbyView = new Lobby(player, border, cl, cards);
-                player.setLobby(lobbyView);
-                player.setConnectToServerView(this);
-                JPanel panel = lobbyView.getPanell();
-                cards.add(panel, "Second Panel");
-
-            } catch (RemoteException e) {
-
-                e.printStackTrace();
-
-            }
+            String username = writeUsernameHereTextField.getText();
+            welcomeToTheRMITextField.setText("Welcome to the RMI president game!");
+            pleaseChooseAUserTextArea.setText("Please choose a user  name and find a game!");
+            player.setUserName(username);
+            Lobby lobbyView = new Lobby(player, border, cl, cards);
+            player.setLobby(lobbyView);
+            player.setConnectToServerView(this);
+            JPanel panel = lobbyView.getPanell();
+            cards.add(panel, "Second Panel");
 
             if(player.findGame()){
 

@@ -46,12 +46,8 @@ public class GameBoard extends JFrame{
         player4Name.setText(namePlayer4 + ", number of cards left : " + opponents.get(2).getHand().size());
 
         passButton.addActionListener(actionEvent -> {
-            try {
-                player.setMyTurn(false);
-                player.setPassTurn(false);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            player.setMyTurn(false);
+            player.setPassTurn(false);
         });
     }
 

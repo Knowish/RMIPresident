@@ -1,6 +1,8 @@
 package fr.univnantes.impl;
 
 import fr.univnantes.inter.PlayerInterface;
+import fr.univnantes.sync.ExchangerRunnable;
+import fr.univnantes.sync.KeepPlaying;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -10,17 +12,20 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static fr.univnantes.impl.ConstUtils.HEART;
-import static fr.univnantes.impl.ConstUtils.QUEEN;
+import static fr.univnantes.constantes.CardConst.HEART;
+import static fr.univnantes.constantes.CardConst.QUEEN;
 
+/**
+ * represente une partie du jeu du President
+ */
 public class President extends Game implements Runnable {
 
     private List<PlayerInterface> winOrder = new ArrayList<>();
     private boolean firstRound = true;
     private int nbOfPlayers;
-    private boolean mustPlaySameValue = false;
+    private boolean mustPlaySameValue = false; //true when two cards of same value have been played in a row
 
-    public President() {
+    President() {
         super();
     }
 
@@ -30,15 +35,16 @@ public class President extends Game implements Runnable {
         new Thread(this).start();
     }
 
+    /**
+     * lance une partie de President
+     */
     @Override
-    public void playGame() throws RemoteException, InterruptedException {
+    public void playGame() {
         while(!gameOver){
             //try-catch pour la deconnexion d'un joueur pendant la partie
-                try {
+            try {
                 initializeGame();
                 int i = this.players.indexOf(identifyFirstPlayer());
-                System.out.println(this.board.toString());
-                System.out.println("Le board doit être vide pour commencer : " + this.board.isEmpty());
 
                 this.winOrder.clear();
                 while(!roundIsDone()) {
@@ -52,7 +58,7 @@ public class President extends Game implements Runnable {
                 }
                 firstRound = false;
 
-                KeepPlaying keepPlaying = new KeepPlaying(winOrder);
+                    KeepPlaying keepPlaying = new KeepPlaying(winOrder);
 
                 if(!keepPlaying.continuePlaying()){
                     gameOver = true;
@@ -62,11 +68,11 @@ public class President extends Game implements Runnable {
                 gameOver = true;
             }
         }
-        disconnectedPlayer();
+        disconnectPlayers();
     }
 
     //Defini la phase d'échange de cartes entre les joueurs
-    private void exchangeCardsPhase(List<PlayerInterface> winOrder) throws RemoteException, InterruptedException {
+    private void exchangeCardsPhase(List<PlayerInterface> winOrder) throws InterruptedException {
 
         //le president doit donner ses deux cartes les moins fortes au trou du cul
         //le trou du cul doit donner ses deux cartes les moins fortes au president;
@@ -136,7 +142,7 @@ public class President extends Game implements Runnable {
         return hasTheHand;
     }
 
-    public void playerPlay(PlayerInterface currentPlayer) throws RemoteException, InterruptedException {
+    private void playerPlay(PlayerInterface currentPlayer) throws RemoteException {
 
             Card lastCardOnBoard;
 
@@ -170,7 +176,14 @@ public class President extends Game implements Runnable {
             currentPlayer.setMyTurn(false);
     }
 
-    private void cardHasBeenPlayed(PlayerInterface currentPlayer, Card playedCard, Card lastCardOnBoard) throws RemoteException, InterruptedException {
+    /**
+     * handles the case when a player played a card
+     * @param currentPlayer the player who is playing a card
+     * @param playedCard the card the player played
+     * @param lastCardOnBoard the last card played
+     * @throws RemoteException when the server isnt reachable
+     */
+    private void cardHasBeenPlayed(PlayerInterface currentPlayer, Card playedCard, Card lastCardOnBoard) throws RemoteException {
         this.board.add(playedCard); //Last Card is added at the end of the list
 
             updateAllTricks(playedCard);
@@ -202,9 +215,9 @@ public class President extends Game implements Runnable {
     }
 
     /**
-     * Finish the game when one of the player disconnected
+     * Finish the game when one of the player disconnected or doesnt wish to continue playing
      */
-    private void disconnectedPlayer() {
+    private void disconnectPlayers() {
         for (PlayerInterface player:players){
             new Thread(() -> {
                 try {
@@ -227,7 +240,7 @@ public class President extends Game implements Runnable {
         }
     }
 
-    public boolean squareFormed() {
+    private boolean squareFormed() {
         int nbCard = this.board.size();
         return nbCard >= 4
                 && this.board.get(nbCard -1).getValue() == this.board.get(nbCard -2).getValue()
@@ -236,7 +249,7 @@ public class President extends Game implements Runnable {
 
     }
 
-    public boolean noPlayersRemaining(PlayerInterface lastPlayer) throws RemoteException {
+    private boolean noPlayersRemaining(PlayerInterface lastPlayer) throws RemoteException {
         boolean survivor = true;
         for (PlayerInterface p : this.players) {
             if (p != lastPlayer) {
@@ -246,7 +259,7 @@ public class President extends Game implements Runnable {
         return survivor;
     }
 
-    public void cleanGame() throws RemoteException {
+    private void cleanGame() throws RemoteException {
         this.board.clear();
         Card CardOnBoard = new Card();
         this.board.add(CardOnBoard);
@@ -257,7 +270,7 @@ public class President extends Game implements Runnable {
         this.mustPlaySameValue = false;
     }
 
-    public final void initializeGame() throws RemoteException, InterruptedException {
+    private void initializeGame() throws RemoteException, InterruptedException {
         gameOver = false;
         generateCardPool();
         distribution();
@@ -270,10 +283,6 @@ public class President extends Game implements Runnable {
 
     @Override
     public void run() {
-        try {
-            playGame();
-        } catch (RemoteException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        playGame();
     }
 }

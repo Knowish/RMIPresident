@@ -8,9 +8,6 @@ import fr.univnantes.inter.PlayerInterface;
 import fr.univnantes.inter.RmiService;
 
 import javax.swing.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -18,29 +15,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Player extends UnicastRemoteObject implements PropertyChangeListener, PlayerInterface, Runnable {
+public class Player extends UnicastRemoteObject implements PlayerInterface, Runnable {
 
 
     private String userName;
     private List<Card> hand;
     private boolean passTurn;
-    private int numberOfPendingPlayers;
-    private PropertyChangeSupport support;
     private boolean myTurn;
     private Lobby lobby;
     private ConnectToServer connectToServerView;
-    private RmiService remoteService;
-    private int orderOfPlay; //the number correspond to the place of the player around the table 0 -> 1 -> 2 -> 3
     private List<PlayerInterface> opponents;
     private GameBoard gameBoard;
     private GuiBuilder guiBuilder;
 
-
-
-    public Player(String userName) throws RemoteException {
+    Player(String userName) throws RemoteException {
         this.userName = userName;
         hand = new ArrayList<>();
-        support = new PropertyChangeSupport(this);
         passTurn = false;
         myTurn = false;
         opponents = new ArrayList<>();
@@ -48,22 +38,24 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
 
     public Player()  throws RemoteException{
         hand = new ArrayList<>();
-        support = new PropertyChangeSupport(this);
         passTurn = false;
         myTurn = false;
         opponents = new ArrayList<>();
     }
 
+    /**
+     * allows a player to find a game of President
+     * @return true if the connection is successful
+     */
     public boolean findGame() {
 
         try {
 
 
-            remoteService = (RmiService) Naming
+            RmiService remoteService = (RmiService) Naming
                     .lookup("//localhost:9999/RmiService");
 
             remoteService.joinGame(this);
-            //JOptionPane.showMessageDialog(null, "Connected to server as " + this.userName);
             System.out.println("Connected to server as " + this.userName);
             return true;
 
@@ -77,7 +69,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     }
 
     @Override
-    public Card playCard(Card lastCard, boolean mustPlaySameValue) throws RemoteException, InterruptedException {
+    public Card playCard(Card lastCard, boolean mustPlaySameValue) {
         Card chosenCard = chooseCard(lastCard, mustPlaySameValue);
         myTurn = false;
         return chosenCard;
@@ -85,12 +77,11 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
 
     /**
      * Prompt the user to choose a card
-     * @param
-     * @param mustPlaySameValue
-     * @return
-     * @throws InterruptedException
+     * @param lastCard the last card played
+     * @param mustPlaySameValue true if two cards of same value have been played before
+     * @return the card the player wishes to play
      */
-    public Card chooseCard(Card lastCard, boolean mustPlaySameValue) throws InterruptedException, RemoteException {
+    private Card chooseCard(Card lastCard, boolean mustPlaySameValue) {
 
         Card chosenCard = lastCard;
         List<Card> cardsICanPlay = this.cardsICanPlay(chosenCard, mustPlaySameValue);
@@ -122,23 +113,23 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     }
 
     @Override
-    public void addToHand(Card card) throws RemoteException {
+    public void addToHand(Card card) {
         hand.add(card);
         sortHand();
     }
 
-    public void pass() throws RemoteException {
+    void pass() {
         passTurn = true;
         setMyTurn(false);
     }
 
     @Override
-    public boolean isPassTurn() throws RemoteException {
+    public boolean isPassTurn() {
         return passTurn;
     }
 
     @Override
-    public void setPassTurn(boolean passTurn) throws RemoteException {
+    public void setPassTurn(boolean passTurn) {
         this.passTurn = passTurn;
         if(passTurn){
             setMyTurn(false);
@@ -146,17 +137,17 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     }
 
     @Override
-    public void setMyTurn(boolean myTurn) throws RemoteException {
+    public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }
 
     @Override
-    public List<Card> getHand() throws RemoteException {
+    public List<Card> getHand() {
         return hand;
     }
 
     @Override
-    public String getUserName() throws RemoteException {
+    public String getUserName() {
         return userName;
     }
 
@@ -166,65 +157,38 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        this.setNumberOfPendingPlayers((int) evt.getNewValue());
-    }
-
-    public int getNumberOfPendingPlayers() {
-        return numberOfPendingPlayers;
-    }
-
-    public void setNumberOfPendingPlayers(int numberOfPendingPlayers) {
-        support.firePropertyChange("numberOfPendingPlayers", this.numberOfPendingPlayers, numberOfPendingPlayers);
-        this.numberOfPendingPlayers = numberOfPendingPlayers;
-    }
-
-    @Override
     public void startGame() throws RemoteException {
         lobby.changeViewToBoardgame();
     }
 
     @Override
-    public void update(Object observable, Object updateMsg) throws RemoteException {
+    public void update(Object observable, Object updateMsg) {
         System.out.println("Received a signal from the server");
         Integer waitingPlayers = (Integer) updateMsg;
         lobby.updateTextWaitingPlayer(waitingPlayers.toString());
-        setNumberOfPendingPlayers(waitingPlayers);
     }
 
-    public boolean isMyTurn() throws RemoteException{
+    public boolean isMyTurn() {
         return myTurn;
     }
 
     @Override
-    public void updateHandView() throws RemoteException {
+    public void updateHandView() {
         gameBoard.updateCards(this.getHand());
     }
 
     @Override
-    public void updateWhosPlaying() throws RemoteException {
+    public void updateWhosPlaying() {
         updateHandView();
         gameBoard.displayWhosPlaying();
-    }
-
-    public int getWaitingPlayers() throws RemoteException {
-        return remoteService.getNumberOfPendingPlayers();
     }
 
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
     }
 
-    public int getOrderOfPlay() throws RemoteException {
-        return orderOfPlay;
-    }
-
-    public void setOrderOfPlay(int orderOfPlay) throws RemoteException {
-        this.orderOfPlay = orderOfPlay;
-    }
-
     @Override
-    public void addOpponent(PlayerInterface opponentName) throws RemoteException {
+    public void addOpponent(PlayerInterface opponentName) {
         opponents.add(opponentName);
     }
 
@@ -236,19 +200,19 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         this.gameBoard = gameBoard;
     }
 
-    public GameBoard getGameBoard(){return this.gameBoard;}
+    private GameBoard getGameBoard(){return this.gameBoard;}
 
-    public void updateTrick(Card card)throws RemoteException{
+    public void updateTrick(Card card) {
         getGameBoard().setTrick(card);
     }
 
     /**
      * return the list of the cards the players have in its hand and that are playable ( >= to the last card played )
-     * @param lastCardPlayed
-     * @param mustPlaySameValue
-     * @return
+     * @param lastCardPlayed the last card placed on top of the trick
+     * @param mustPlaySameValue true if two cards of same value have been played before
+     * @return the list of the cards the player can play
      */
-    public List<Card> cardsICanPlay(Card lastCardPlayed, boolean mustPlaySameValue) {
+    private List<Card> cardsICanPlay(Card lastCardPlayed, boolean mustPlaySameValue) {
         List<Card> playableCards = new ArrayList<>();
 
         for (Card cardInMyHand : hand) {
@@ -266,17 +230,16 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
     }
 
     @Override
-    public void sortHand() throws RemoteException {
+    public void sortHand() {
         Collections.sort(this.hand);
     }
 
     /**
-     *
-     * @param winOrder 1 if the player is the president, 4 if he is the trou du cul
-     * @throws RemoteException
+     * échange une carte avec un autre joueur
+     * @param winOrder la place à laquelle le joueur a terminé la partie 1 if the player is the president, 4 if he is the trou du cul
      */
     @Override
-    public Card exchangeCard(int winOrder) throws RemoteException {
+    public Card exchangeCard(int winOrder) {
         Card exchangedCard = null;
 
         switch (winOrder){
@@ -316,7 +279,7 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
 
     }
 
-    private Card chooseOneCardToExchange() throws RemoteException {
+    private Card chooseOneCardToExchange() {
         String cardName = gameBoard.promptCardChoice(hand, "Choose one of your cards to exchange");
 
         while (cardName==null){
@@ -326,27 +289,31 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         return findCardWithName(cardName);
     }
 
-    private Card getBestCard() throws RemoteException {
+    private Card getBestCard(){
         return  hand.get(hand.size()-1);
     }
 
     @Override
-    public void removeCardFromHand(Card cardToRemove) throws RemoteException {
+    public void removeCardFromHand(Card cardToRemove) {
         hand.remove(cardToRemove);
     }
 
     @Override
-    public boolean askKeepPlaying(int rank) throws RemoteException {
+    public boolean askKeepPlaying(int rank) {
         return gameBoard.askKeepPlaying(rank);
     }
 
     @Override
     public void goBackToLogin(String message) throws RemoteException {
+        if (!message.equals("")){
+            connectToServerView.displayMessage(message);
+        }
         this.guiBuilder.dispose();
-        displayGui(message);
+        Player myPlayer = new Player();
+        myPlayer.run();
     }
 
-    private void displayGui(String message){
+    private void displayGui(){
         GuiBuilder frame = new GuiBuilder(this);
         this.guiBuilder = frame;
 
@@ -354,15 +321,12 @@ public class Player extends UnicastRemoteObject implements PropertyChangeListene
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        if (!message.equals("")){
-            connectToServerView.displayMessage(message);
-        }
 
     }
 
     @Override
     public void run() {
-        displayGui("");
+        displayGui();
     }
 
     public void setConnectToServerView(ConnectToServer connectToServer) {

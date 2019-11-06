@@ -1,6 +1,6 @@
-package fr.univnantes.impl;
+package fr.univnantes.constantes;
 
-public final class ConstUtils {
+public final class CardConst {
 
     /*-----STRONG CARDS-----*/
 

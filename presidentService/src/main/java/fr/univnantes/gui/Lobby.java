@@ -18,7 +18,7 @@ public class Lobby {
     private CardLayout cl;
     private JPanel cards;
 
-    Lobby(Player player, Border border, CardLayout cl, JPanel cards) throws RemoteException {
+    Lobby(Player player, Border border, CardLayout cl, JPanel cards) {
 
         this.player = player;
         this.cl = cl;

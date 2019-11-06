@@ -6,29 +6,32 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.*;
 
-import static fr.univnantes.impl.ConstUtils.*;
+import static fr.univnantes.constantes.CardConst.*;
 
+/**
+ * represente une partie
+ */
 abstract class Game implements Serializable {
 
-    protected List<PlayerInterface> players = new ArrayList<>();
-    protected List<Card> board = new ArrayList<>();
-    protected boolean gameOver;
+    List<PlayerInterface> players = new ArrayList<>();
+    List<Card> board = new ArrayList<>();
+    boolean gameOver;
 
     abstract void playGame() throws RemoteException, InterruptedException;
     abstract boolean roundIsDone() throws RemoteException;
     abstract PlayerInterface identifyFirstPlayer() throws RemoteException;
 
-    public Game(){}
+    Game(){}
 
-    public Game(List<PlayerInterface> players) {
+    Game(List<PlayerInterface> players) {
         this.players.addAll(players);
     }
 
-    public final void addPlayer(PlayerInterface player) {
+    final void addPlayer(PlayerInterface player) {
         this.players.add(player);
     }
 
-    public void distribution() throws RemoteException {
+    void distribution() throws RemoteException {
         for (int i = 0; i < this.board.size(); ++i) {
             this.players.get(i % this.players.size()).addToHand(this.board.get(i));
         }
@@ -38,7 +41,7 @@ abstract class Game implements Serializable {
         }
     }
 
-    public void generateCardPool() {
+    void generateCardPool() {
 
         String[] colors = {SPADE, HEART, DIAMOND, CLUB};
         this.board.clear();
@@ -76,11 +79,11 @@ abstract class Game implements Serializable {
     }
 
 
-    public List<PlayerInterface> getPlayers() {
+    List<PlayerInterface> getPlayers() {
         return players;
     }
 
-    public List<Card> getBoard() {
+    List<Card> getBoard() {
         return board;
     }
 

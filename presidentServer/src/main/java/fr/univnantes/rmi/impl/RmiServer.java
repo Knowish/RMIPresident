@@ -2,8 +2,6 @@ package fr.univnantes.rmi.impl;
 import fr.univnantes.impl.President;
 import fr.univnantes.inter.PlayerInterface;
 import fr.univnantes.inter.RmiService;
-
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -14,51 +12,24 @@ import java.util.*;
 public class RmiServer extends Observable implements RmiService {
 
     private List<PlayerInterface> pendingPlayers;
-    private List<WrappedObserver> observers;
+    private List<ClientObserver> observers;
     private int numberOfPendingPlayers;
     private final int NB_PLAYERS = 4; //the maximum of players in a game
 
     /**
-     * define an observer. It is used to notify the pending players when a new player is
-     * joining the game.
-     */
-    private class WrappedObserver implements Observer, Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        private PlayerInterface ro;
-
-        WrappedObserver(PlayerInterface ro) {
-            this.ro = ro;
-        }
-
-        @Override
-        public void update(Observable o, Object arg) {
-            try {
-                ro.update(o.toString(), arg);
-            } catch (RemoteException e) {
-                System.out
-                        .println("Remote exception removing observer:" + this);
-                o.deleteObserver(this);
-            }
-        }
-
-    }
-
-    /**
      * allows a player to join a game
-     * @param o the new player who joins the game
+     * @param obs the new player who joins the game
      * @throws RemoteException when the server cannot communicate with the player
      */
     @Override
-    synchronized public void joinGame(PlayerInterface o) throws RemoteException {
+    synchronized public void joinGame(PlayerInterface obs) throws RemoteException {
 
         //add the player as an observer so he can be notified when another player
         //joins the game
-        WrappedObserver mo = new WrappedObserver(o);
+        ClientObserver mo = new ClientObserver(obs);
         addObserver(mo);
 
-        pendingPlayers.add(o);
+        pendingPlayers.add(obs);
         observers.add(mo);
         numberOfPendingPlayers ++ ;
 
