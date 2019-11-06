@@ -40,3 +40,9 @@ Le server hérite de l'interface Observable. À chaque fois qu'un Client va rejo
 À la fin d'une manche, les joueurs doivent décider s'ils veulent continuer la partie. Il suffit qu'un seul des joueurs decide de ne plus vouloir jouer pour mettre fin à la partie. Ce mécanisme est représenté dans la classe KeepPlaying du projet presidentService.
 Le serveur va créer un thread pour chaque joueur. Tant que le serveur n'a pas obtenu la réponse de chaque joueur ou qu'un joueur ne souhaite plus jouer ou qu'aucune réponse n'a été donné depuis 30 secondes, le serveur va attendre 30 secondes. À chaque fois qu'un joueur va donner sa réponse, il va notifier le serveur. Si aucune des conditions d'arrêt de la partie n'est obtenue, la partie peut continuer. 
 
+3. Echange de cartes
+
+Comme mentionné ci-dessus, les joueurs doivent échanger des cartes entre eux dès le début de la deuxième manche. Le mécanisme d'échange est décrit dans la méthode exchangeCardsPhase de la classe President du projet presidentService. Le serveur va créer un ExchangerRunnable pour chaque joueur. Ce Runnable va utiliser un objet Exchanger pour mener à bien son échange. 
+
+4. La partie
+
