@@ -27,3 +27,11 @@ Il doit pour cela sélectionner la carte qu'il désire placer dans la liste dér
 # IV. Fin de la partie
 
 Lorsque les trois premiers joueurs ont réussi à vider leur main, la partie s'arrête et chaque joueur a une fenêtre lui indiquant son résultat et demande s'il désire rejouer. Si les quatres joueurs rejouent, une nouvelle partie se lance. Le président donnera deux cartes de son choix au trou-du-cul, le vice-président une au vice-trou-du-cul, ce dernier verra sa meilleure carte donnée au vice-président et les deux meilleures cartes du trou-du-cul seront données au président. La nouvelle partie peut alors démarrer.
+
+# V. Points de synchronisation dans l'application 
+
+1. Attente d'une partie.
+
+Comme mentionné ci-dessus, une partie ne peut commencer que lorsque quatre joueurs sont réunis. Il nous faut donc un système qui permette d'indiquer aux clients le nombre de joueurs en attente et de les avertir lorsqu'une partie a été trouvé. Pour ce faire, nous avons pris la décision de mettre en application un pattern observer. 
+Le server hérite de l'interface Observable. À chaque fois qu'un Client va rejoindre le serveur, un objet ClientObserver va lui être affecté. De plus, une variable indiquant le nombre de joueur en attente va être incrémentée. À chaque fois que la valeur de cette variable est modifiée, le server va notifier tout ses ClientObserver. Cette mécanique peut être observée dans la classe RmiServer du projet presidentServer.
+
