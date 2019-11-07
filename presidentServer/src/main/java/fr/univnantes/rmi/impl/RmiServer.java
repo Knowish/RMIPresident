@@ -29,9 +29,18 @@ public class RmiServer extends Observable implements RmiService {
         ClientObserver mo = new ClientObserver(obs);
         addObserver(mo);
 
+        for (PlayerInterface p : pendingPlayers) {
+            try {
+                p.getUserName();
+            } catch (RemoteException e) {
+                pendingPlayers.remove(p);
+                --numberOfPendingPlayers;
+            }
+        }
+
         pendingPlayers.add(obs);
         observers.add(mo);
-        numberOfPendingPlayers ++ ;
+        numberOfPendingPlayers++;
 
         setChanged();
         notifyObservers(numberOfPendingPlayers);
@@ -74,11 +83,6 @@ public class RmiServer extends Observable implements RmiService {
             currentPlayer.startGame();
         }
         return startingPlayers;
-    }
-
-    @Override
-    public int getNumberOfPendingPlayers() {
-        return numberOfPendingPlayers;
     }
 
     private RmiServer() {
